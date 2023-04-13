@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace FarmGame
+namespace FarmGame.Agent
 {
     public class AgentMover : MonoBehaviour
     {
@@ -13,6 +14,11 @@ namespace FarmGame
         private void Update()
         {
             _testTransform.position += (Vector3)MovementInput * Time.deltaTime;
+        }
+
+        internal void SetMovementInput(Vector2 input)
+        {
+            MovementInput = input;
         }
     }
 }
