@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace FarmGame.Input
@@ -12,8 +13,8 @@ namespace FarmGame.Input
         private PlayerInput _input;
         [field : SerializeField]
         public Vector2 InputValue { get; private set; }
+        public UnityEvent<Vector2> OnMoveInput;
 
-        public Transform _testTransform;
 
         private void OnEnable()
         {
@@ -24,12 +25,10 @@ namespace FarmGame.Input
         private void Move(InputAction.CallbackContext obj)
         {
             InputValue = obj.ReadValue<Vector2>();
+            OnMoveInput?.Invoke(InputValue);
         }
 
-        private void Update()
-        {
-            _testTransform.position += (Vector3)InputValue * Time.deltaTime;
-        }
+
 
         private void OnDisable()
         {
