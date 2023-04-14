@@ -10,6 +10,7 @@ namespace FarmGame.Agent
     {
         public Vector2 MovementInput { get; set; }
         public Transform _testTransform;
+        public event Action<bool> OnMove;
 
         private void Update()
         {
@@ -19,6 +20,7 @@ namespace FarmGame.Agent
         internal void SetMovementInput(Vector2 input)
         {
             MovementInput = input;
+            OnMove?.Invoke(input.magnitude > 0.1f);
         }
     }
 }
