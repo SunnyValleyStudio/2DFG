@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
+using UnityEngine.Windows;
 
 namespace FarmGame.Agent
 {
@@ -18,17 +20,29 @@ namespace FarmGame.Agent
         [SerializeField]
         private float _speed = 2;
 
+        [SerializeField]
+        private CollisionDetector _collisionDetector;
+
         private void FixedUpdate()
         {
             Vector2 velocity = MovementInput * _speed;
+
+            float distanceToMoveThisFrame = velocity.magnitude * Time.fixedDeltaTime;
+
+            if(_collisionDetector.IsMovementValid(MovementInput,distanceToMoveThisFrame) == false)
+            {
+                velocity = Vector2.zero;
+            }
+
+            OnMove?.Invoke(velocity.magnitude > 0.1f);
+
             _rigidbody.MovePosition(
                 _rigidbody.position + velocity * Time.fixedDeltaTime);
         }
 
-        internal void SetMovementInput(Vector2 input)
+        public void SetMovementInput(Vector2 input)
         {
             MovementInput = input;
-            OnMove?.Invoke(input.magnitude > 0.1f);
         }
     }
 }
