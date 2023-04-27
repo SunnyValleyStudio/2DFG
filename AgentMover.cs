@@ -9,14 +9,20 @@ namespace FarmGame.Agent
     public class AgentMover : MonoBehaviour
     {
         public Vector2 MovementInput { get; private set; }
-        public Transform _testTransform;
-        public event Action<bool> OnMove;
-        [SerializeField]
-        private float speed = 2;
 
-        private void Update()
+        [SerializeField]
+        private Rigidbody2D _rigidbody;
+
+        public event Action<bool> OnMove;
+
+        [SerializeField]
+        private float _speed = 2;
+
+        private void FixedUpdate()
         {
-            _testTransform.position += (Vector3)MovementInput*speed * Time.deltaTime;
+            Vector2 velocity = MovementInput * _speed;
+            _rigidbody.MovePosition(
+                _rigidbody.position + velocity * Time.fixedDeltaTime);
         }
 
         internal void SetMovementInput(Vector2 input)
