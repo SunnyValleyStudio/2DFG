@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace FarmGame.Agent
 {
@@ -15,9 +16,18 @@ namespace FarmGame.Agent
             movingBoolFlag = "Movement",
             pickup = "Pickup";
 
+        [HideInInspector]
+        public UnityEvent OnAnimationEnd;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+        }
+
+        public void PlayerActionAnimationEnd()
+        {
+            OnAnimationEnd?.Invoke();
+            OnAnimationEnd.RemoveAllListeners();
         }
 
         public void PlayMovementAnimation(bool val)

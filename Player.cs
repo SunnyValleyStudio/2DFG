@@ -36,8 +36,17 @@ namespace FarmGame.Agent
             {
                 if (item.CanInteract())
                 {
+                    _agentMover.Stopped = true;
+                    Debug.Log("Agent Stopped");
+                    _agentAnimation.OnAnimationEnd.AddListener(
+                        () =>
+                        {
+                            item.Interact(this);
+                            _agentMover.Stopped = false;
+                            Debug.Log("Agent Restarted");
+                        }
+                        );
                     _agentAnimation.PlayAnimation(AnimationType.PickUp);
-                    item.Interact(this);
                     return;
                 }
             }
