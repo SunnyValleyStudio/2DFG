@@ -36,10 +36,13 @@ namespace FarmGame.Agent
             {
                 if (item.CanInteract())
                 {
+                    _agentAnimation.PlayAnimation(AnimationType.PickUp);
                     item.Interact(this);
+                    return;
                 }
             }
         }
+
 
         private void OnDisable()
         {

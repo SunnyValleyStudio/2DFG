@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,11 @@ namespace FarmGame.Agent
     {
         private Animator _animator;
         [SerializeField]
-        private string directionX = "DirectionX", directionY = "DirectionY", movingBoolFlag = "Movement";
+        private string directionX = "DirectionX", 
+            directionY = "DirectionY", 
+            movingBoolFlag = "Movement",
+            pickup = "Pickup";
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -26,5 +31,19 @@ namespace FarmGame.Agent
             _animator.SetFloat(directionX, directionInt.x);
             _animator.SetFloat(directionY, directionInt.y);
         }
+
+        public void PlayAnimation(AnimationType animationType)
+        {
+            if(animationType == AnimationType.PickUp)
+            {
+                _animator.SetTrigger(pickup);
+            }
+        }
+    }
+
+    public enum AnimationType
+    {
+        None,
+        PickUp
     }
 }
