@@ -1,5 +1,6 @@
 using FarmGame.Input;
 using FarmGame.Interactions;
+using FarmGame.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,25 @@ namespace FarmGame.Agent
         [SerializeField]
         private InteractionDetector _interactionDetector;
 
+        private HandTool _selectedTool = new HandTool(ToolType.Hand);
+
+        public AgentMover AgentMover
+        {
+            get => _agentMover;
+        }
+        public PlayerInputFarm AgentInput
+        {
+            get => _agentInput;
+        }
+        public AgentAnimation AgentAnimation
+        {
+            get => _agentAnimation;
+        }
+        public InteractionDetector InteractionDetector
+        { 
+            get => _interactionDetector; 
+        }
+
         private void OnEnable()
         {
             _agentInput.OnMoveInput.AddListener(_agentMover.SetMovementInput);
@@ -32,24 +52,7 @@ namespace FarmGame.Agent
         private void PerformAction()
         {
             Debug.Log("Interacting");
-            foreach (PickUpInteraction item in _interactionDetector.PerformDetection())
-            {
-                if (item.CanInteract())
-                {
-                    _agentMover.Stopped = true;
-                    Debug.Log("Agent Stopped");
-                    _agentAnimation.OnAnimationEnd.AddListener(
-                        () =>
-                        {
-                            item.Interact(this);
-                            _agentMover.Stopped = false;
-                            Debug.Log("Agent Restarted");
-                        }
-                        );
-                    _agentAnimation.PlayAnimation(AnimationType.PickUp);
-                    return;
-                }
-            }
+            _selectedTool.UseTool(this);
         }
 
 
