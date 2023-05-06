@@ -18,7 +18,7 @@ namespace FarmGame.Tools
         {
             foreach (PickUpInteraction item in agent.InteractionDetector.PerformDetection())
             {
-                if (item.CanInteract())
+                if (item.CanInteract(agent))
                 {
                     agent.AgentMover.Stopped = true;
                     Debug.Log("Agent Stopped");
