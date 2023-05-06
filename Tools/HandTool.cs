@@ -6,16 +6,15 @@ using UnityEngine;
 
 namespace FarmGame.Tools
 {
-    public class HandTool
+    public class HandTool : Tool
     {
-        public ToolType ToolType { get;}
 
-        public HandTool(ToolType toolType)
+        public HandTool(ToolType toolType) : base(toolType)
         {
-            this.ToolType = toolType;
+
         }
 
-        public void UseTool(Player agent)
+        public override void UseTool(Player agent)
         {
             foreach (PickUpInteraction item in agent.InteractionDetector.PerformDetection())
             {

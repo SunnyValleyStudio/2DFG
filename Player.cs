@@ -20,7 +20,7 @@ namespace FarmGame.Agent
         [SerializeField]
         private InteractionDetector _interactionDetector;
 
-        private HandTool _selectedTool = new HandTool(ToolType.Hand);
+        private Tool _selectedTool = new HandTool(ToolType.Hand);
 
         public AgentMover AgentMover
         {
@@ -37,6 +37,10 @@ namespace FarmGame.Agent
         public InteractionDetector InteractionDetector
         { 
             get => _interactionDetector; 
+        }
+        public Tool SelectedTool 
+        { 
+            get => _selectedTool;
         }
 
         private void OnEnable()
