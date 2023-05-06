@@ -16,7 +16,7 @@ namespace FarmGame.Tools
 
         public override void UseTool(Player agent)
         {
-            foreach (PickUpInteraction item in agent.InteractionDetector.PerformDetection())
+            foreach (IInteractable item in agent.InteractionDetector.PerformDetection())
             {
                 if (item.CanInteract(agent))
                 {

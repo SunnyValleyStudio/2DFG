@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace FarmGame.Interactions
 {
-    public class PickUpInteraction : MonoBehaviour
+    public class PickUpInteraction : MonoBehaviour, IInteractable
     {
         [field: SerializeField]
-        public List<ToolType> UsableTools { get; set; } 
+        public List<ToolType> UsableTools { get; set; }
             = new List<ToolType>();
 
         public bool CanInteract(Player agent)
