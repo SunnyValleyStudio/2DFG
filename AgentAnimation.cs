@@ -18,6 +18,7 @@ namespace FarmGame.Agent
 
         [HideInInspector]
         public UnityEvent OnAnimationEnd;
+        public UnityEvent OnFootStep;
 
         private void Awake()
         {
@@ -29,6 +30,9 @@ namespace FarmGame.Agent
             OnAnimationEnd?.Invoke();
             OnAnimationEnd.RemoveAllListeners();
         }
+
+        public void PlayFootstep() 
+            => OnFootStep?.Invoke();
 
         public void PlayMovementAnimation(bool val)
             => _animator.SetBool(movingBoolFlag, val);
