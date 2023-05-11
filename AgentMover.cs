@@ -23,8 +23,18 @@ namespace FarmGame.Agent
         [SerializeField]
         private CollisionDetector _collisionDetector;
 
+        private bool _stopped;
+
+        public bool Stopped
+        {
+            get { return _stopped; }
+            set { _stopped = value; }
+        }
+
         private void FixedUpdate()
         {
+            if (_stopped) return;
+
             Vector2 velocity = MovementInput * _speed;
 
             float distanceToMoveThisFrame = velocity.magnitude * Time.fixedDeltaTime;
