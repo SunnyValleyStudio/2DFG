@@ -42,6 +42,10 @@ namespace FarmGame.Agent
             if (direction.magnitude < 0.1f)
                 return;
             Vector2Int directionInt = Vector2Int.RoundToInt(direction);
+            if(directionInt.x != 0)
+            {
+                directionInt.y = 0;
+            }
             _animator.SetFloat(directionX, directionInt.x);
             _animator.SetFloat(directionY, directionInt.y);
         }
