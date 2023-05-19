@@ -20,13 +20,13 @@ namespace FarmGame.Tools
             {
                 if (item.CanInteract(agent))
                 {
-                    agent.AgentMover.Stopped = true;
+                    agent.Blocked = true;
                     Debug.Log("Agent Stopped");
                     agent.AgentAnimation.OnAnimationEnd.AddListener(
                         () =>
                         {
                             item.Interact(agent);
-                            agent.AgentMover.Stopped = false;
+                            agent.Blocked = false;
                             Debug.Log("Agent Restarted");
                         }
                         );

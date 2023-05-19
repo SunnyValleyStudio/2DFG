@@ -23,6 +23,20 @@ namespace FarmGame.Input
             _input.actions["Player/Interact"].performed += Interact;
         }
 
+        public void BlockInput(bool val)
+        {
+            if (val)
+            {
+                Debug.LogWarning("Input has been BLOCKED", gameObject);
+                _input.enabled = false;
+            }
+            else
+            {
+                Debug.LogWarning("Input has been unblocked", gameObject);
+                _input.enabled = true;
+            }
+        }
+
         private void Interact(InputAction.CallbackContext obj)
         {
             OnPerformAction?.Invoke();

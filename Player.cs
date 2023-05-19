@@ -22,6 +22,20 @@ namespace FarmGame.Agent
 
         private Tool _selectedTool = new HandTool(ToolType.Hand);
 
+        private bool _blocked = false;
+
+        public bool Blocked
+        {
+            get { 
+                return _blocked; 
+            }
+            set { 
+                _blocked = value; 
+                _agentMover.Stopped = _blocked;
+                _agentInput.BlockInput(_blocked);
+            }
+        }
+
         public AgentMover AgentMover
         {
             get => _agentMover;
