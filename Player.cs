@@ -1,3 +1,4 @@
+using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
 using FarmGame.Tools;
@@ -35,6 +36,13 @@ namespace FarmGame.Agent
                 _agentInput.BlockInput(_blocked);
             }
         }
+        [SerializeField]
+        private FieldDetector _fieldDetector;
+
+        public FieldDetector FieldDetectorObject
+        {
+            get { return _fieldDetector; }
+        }
 
         public AgentMover AgentMover
         {
@@ -62,6 +70,7 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.AddListener(_agentMover.SetMovementInput);
             _agentInput.OnMoveInput.AddListener(_agentAnimation.ChangeDirection);
             _agentInput.OnMoveInput.AddListener(_interactionDetector.SetInteractionDirection);
+            _agentInput.OnMoveInput.AddListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction += PerformAction;
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
@@ -79,6 +88,7 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.RemoveListener(_agentMover.SetMovementInput);
             _agentInput.OnMoveInput.RemoveListener(_agentAnimation.ChangeDirection);
             _agentInput.OnMoveInput.RemoveListener(_interactionDetector.SetInteractionDirection);
+            _agentInput.OnMoveInput.RemoveListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction -= PerformAction;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
