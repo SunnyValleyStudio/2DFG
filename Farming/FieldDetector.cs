@@ -23,7 +23,18 @@ namespace FarmGame.Farming
 		public Vector2 PositionInFront => 
 			(Vector2)_interactorCenter.position + _interactionDirection * 0.5f;
 
-		public void SetInteractionDirection(Vector2 direction)
+		[SerializeField]
+		private FieldPositionValidator _fieldPositionValidator;
+
+        private void Awake()
+        {
+            _fieldPositionValidator = FindObjectOfType<FieldPositionValidator>();
+			if (_fieldPositionValidator == null)
+				Debug.LogWarning("Field positon will not be validated without Field Position Validator"
+					, gameObject);
+        }
+
+        public void SetInteractionDirection(Vector2 direction)
 		{
 			if(direction.magnitude > 0.1f)
 			{
@@ -49,6 +60,11 @@ namespace FarmGame.Farming
 			{
 				Gizmos.color = Color.red;
 				Gizmos.DrawSphere(PositionInFront, 0.2f);
+				if(_fieldPositionValidator != null && _fieldPositionValidator.IsItFieldTile(PositionInFront))
+				{
+					Vector2 validPosition = _fieldPositionValidator.GetValidFieldTile(PositionInFront);
+					Gizmos.DrawWireCube(validPosition, Vector2.one);
+				}
 			}
         }
     }
