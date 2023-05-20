@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -66,6 +67,13 @@ namespace FarmGame.Farming
 					Gizmos.DrawWireCube(validPosition, Vector2.one);
 				}
 			}
+        }
+
+        public List<Vector2> DetectValidTiles()
+        {
+			if (_fieldPositionValidator == null)
+				return new List<Vector2>();
+			return _fieldPositionValidator.GetValidFieldTiles(new List<Vector2>() { PositionInFront } );
         }
     }
 }

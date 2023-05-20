@@ -16,7 +16,11 @@ namespace FarmGame.Tools
 
         public override void UseTool(Player agent)
         {
-            foreach (IInteractable item in agent.InteractionDetector.PerformDetection())
+            IEnumerable<IInteractable> interactables = agent.FieldDetectorObject.IsNearField ?
+                agent.InteractionDetector.PerformDetection(agent.FieldDetectorObject.DetectValidTiles()[0])
+                : agent.InteractionDetector.PerformDetection();
+
+            foreach (IInteractable item in interactables)
             {
                 if (item.CanInteract(agent))
                 {
