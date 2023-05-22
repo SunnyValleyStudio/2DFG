@@ -9,6 +9,8 @@ namespace FarmGame.Tools
     {
         public ToolType ToolType { get; }
 
+        public RuntimeAnimatorController ToolAnimator { get; set; }
+
         protected Tool(ToolType toolType)
         {
             this.ToolType = toolType;

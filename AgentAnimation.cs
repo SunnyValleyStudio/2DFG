@@ -16,9 +16,14 @@ namespace FarmGame.Agent
             movingBoolFlag = "Movement",
             pickup = "Pickup", swing = "Swing";
 
+        [SerializeField]
+        private ToolAnimation toolAnimation;
+
         [HideInInspector]
         public UnityEvent OnAnimationEnd;
         public UnityEvent OnFootStep;
+
+        public ToolAnimation ToolAnimation { get => toolAnimation;}
 
         private void Awake()
         {

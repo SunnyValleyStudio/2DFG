@@ -1,8 +1,5 @@
 using FarmGame.Agent;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace FarmGame.Tools
 {
@@ -24,6 +21,11 @@ namespace FarmGame.Tools
                     Debug.Log("Agent Restarted");
                 }
                 );
+            if(ToolAnimator != null)
+            {
+                agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
+                agent.AgentAnimation.ToolAnimation.PlayAnimation();
+            }
             agent.AgentAnimation.PlayAnimation(AnimationType.Swing);
             return;
         }

@@ -21,6 +21,9 @@ namespace FarmGame.Agent
         [SerializeField]
         private InteractionDetector _interactionDetector;
 
+        [SerializeField]
+        private RuntimeAnimatorController _hoeAnimatorController;
+
         private Tool _selectedTool = new HoeTool(ToolType.Hoe);
             //new HandTool(ToolType.Hand);
 
@@ -70,6 +73,7 @@ namespace FarmGame.Agent
         {
             _agentInput.OnMoveInput.AddListener(_agentMover.SetMovementInput);
             _agentInput.OnMoveInput.AddListener(_agentAnimation.ChangeDirection);
+            _agentInput.OnMoveInput.AddListener(_agentAnimation.ToolAnimation.ChangeDirection);
             _agentInput.OnMoveInput.AddListener(_interactionDetector.SetInteractionDirection);
             _agentInput.OnMoveInput.AddListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction += PerformAction;
@@ -80,6 +84,7 @@ namespace FarmGame.Agent
         private void PerformAction()
         {
             Debug.Log("Interacting");
+            _selectedTool.ToolAnimator = _hoeAnimatorController;
             _selectedTool.UseTool(this);
         }
 
@@ -88,6 +93,7 @@ namespace FarmGame.Agent
         {
             _agentInput.OnMoveInput.RemoveListener(_agentMover.SetMovementInput);
             _agentInput.OnMoveInput.RemoveListener(_agentAnimation.ChangeDirection);
+            _agentInput.OnMoveInput.RemoveListener(_agentAnimation.ToolAnimation.ChangeDirection);
             _agentInput.OnMoveInput.RemoveListener(_interactionDetector.SetInteractionDirection);
             _agentInput.OnMoveInput.RemoveListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction -= PerformAction;
