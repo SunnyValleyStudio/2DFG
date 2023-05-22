@@ -21,7 +21,8 @@ namespace FarmGame.Agent
         [SerializeField]
         private InteractionDetector _interactionDetector;
 
-        private Tool _selectedTool = new HandTool(ToolType.Hand);
+        private Tool _selectedTool = new HoeTool(ToolType.Hoe);
+            //new HandTool(ToolType.Hand);
 
         private bool _blocked = false;
 

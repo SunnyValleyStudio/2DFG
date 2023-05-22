@@ -50,6 +50,7 @@ namespace FarmGame.Tools
     public enum ToolType
     {
         None,
-        Hand
+        Hand,
+        Hoe
     }
 }

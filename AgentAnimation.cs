@@ -14,7 +14,7 @@ namespace FarmGame.Agent
         private string directionX = "DirectionX", 
             directionY = "DirectionY", 
             movingBoolFlag = "Movement",
-            pickup = "Pickup";
+            pickup = "Pickup", swing = "Swing";
 
         [HideInInspector]
         public UnityEvent OnAnimationEnd;
@@ -56,12 +56,17 @@ namespace FarmGame.Agent
             {
                 _animator.SetTrigger(pickup);
             }
+            else if(animationType == AnimationType.Swing)
+            {
+                _animator.SetTrigger(swing);
+            }
         }
     }
 
     public enum AnimationType
     {
         None,
-        PickUp
+        PickUp,
+        Swing
     }
 }
