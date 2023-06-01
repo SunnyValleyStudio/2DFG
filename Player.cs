@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace FarmGame.Agent
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IAgent
     {
         [SerializeField]
         private AgentMover _agentMover;
@@ -25,17 +25,19 @@ namespace FarmGame.Agent
         private RuntimeAnimatorController _hoeAnimatorController;
 
         private Tool _selectedTool = new HoeTool(ToolType.Hoe);
-            //new HandTool(ToolType.Hand);
+        //private Tool _selectedTool = new HandTool(ToolType.Hand);
 
         private bool _blocked = false;
 
         public bool Blocked
         {
-            get { 
-                return _blocked; 
+            get
+            {
+                return _blocked;
             }
-            set { 
-                _blocked = value; 
+            set
+            {
+                _blocked = value;
                 _agentMover.Stopped = _blocked;
                 _agentInput.BlockInput(_blocked);
             }
@@ -61,11 +63,11 @@ namespace FarmGame.Agent
             get => _agentAnimation;
         }
         public InteractionDetector InteractionDetector
-        { 
-            get => _interactionDetector; 
+        {
+            get => _interactionDetector;
         }
-        public Tool SelectedTool 
-        { 
+        public Tool SelectedTool
+        {
             get => _selectedTool;
         }
 

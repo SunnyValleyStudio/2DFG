@@ -14,7 +14,7 @@ namespace FarmGame.Tools
 
         }
 
-        public override void UseTool(Player agent)
+        public override void UseTool(IAgent agent)
         {
             IEnumerable<IInteractable> interactables = null;
             if (agent.FieldDetectorObject.IsNearField)

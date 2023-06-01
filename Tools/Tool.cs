@@ -16,6 +16,6 @@ namespace FarmGame.Tools
             this.ToolType = toolType;
         }
 
-        public abstract void UseTool(Player agent);
+        public abstract void UseTool(IAgent agent);
     }
 }

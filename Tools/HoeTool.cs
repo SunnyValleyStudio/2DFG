@@ -10,7 +10,7 @@ namespace FarmGame.Tools
 
         }
 
-        public override void UseTool(Player agent)
+        public override void UseTool(IAgent agent)
         {
             agent.Blocked = true;
             Debug.Log("Agent Stopped");
