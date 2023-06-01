@@ -14,5 +14,6 @@ namespace FarmGame.Agent
         FieldDetector FieldDetectorObject { get; }
         InteractionDetector InteractionDetector { get; }
         Tool SelectedTool { get; }
+        FieldController FieldController { get; }
     }
 }

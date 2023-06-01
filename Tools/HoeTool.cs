@@ -1,4 +1,5 @@
 using FarmGame.Agent;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FarmGame.Tools
@@ -12,16 +13,25 @@ namespace FarmGame.Tools
 
         public override void UseTool(IAgent agent)
         {
+            if (agent.FieldDetectorObject.IsNearField == false)
+                return;
+            List<Vector2> detectedPosition = agent.FieldDetectorObject.DetectValidTiles();
+            if(detectedPosition.Count <= 0)
+                return;
             agent.Blocked = true;
             Debug.Log("Agent Stopped");
             agent.AgentAnimation.OnAnimationEnd.AddListener(
             () =>
             {
-                    agent.Blocked = false;
-                    Debug.Log("Agent Restarted");
+                foreach (Vector2 worldPositon in detectedPosition)
+                {
+                    agent.FieldController.PrepareFieldAt(worldPositon);
                 }
+                agent.Blocked = false;
+                Debug.Log("Agent Restarted");
+            }
                 );
-            if(ToolAnimator != null)
+            if (ToolAnimator != null)
             {
                 agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
                 agent.AgentAnimation.ToolAnimation.PlayAnimation();

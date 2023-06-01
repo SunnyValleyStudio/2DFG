@@ -27,6 +27,9 @@ namespace FarmGame.Agent
         private Tool _selectedTool = new HoeTool(ToolType.Hoe);
         //private Tool _selectedTool = new HandTool(ToolType.Hand);
 
+        [SerializeField]
+        private FieldController _fieldController;
+
         private bool _blocked = false;
 
         public bool Blocked
@@ -70,6 +73,8 @@ namespace FarmGame.Agent
         {
             get => _selectedTool;
         }
+
+        public FieldController FieldController => _fieldController;
 
         private void OnEnable()
         {
