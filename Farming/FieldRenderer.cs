@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace FarmGame
+namespace FarmGame.Farming
 {
     public class FieldRenderer : MonoBehaviour
     {
