@@ -11,11 +11,21 @@ namespace FarmGame.Tools
 
         }
 
+        public override void Equip(IAgent agent)
+        {
+            agent.FieldDetectorObject.StartChecking(ToolRange);
+        }
+
+        public override void PutAway(IAgent agent)
+        {
+            agent.FieldDetectorObject.StopChecking();
+        }
+
         public override void UseTool(IAgent agent)
         {
             if (agent.FieldDetectorObject.IsNearField == false)
                 return;
-            List<Vector2> detectedPosition = agent.FieldDetectorObject.DetectValidTiles();
+            List<Vector2> detectedPosition = agent.FieldDetectorObject.ValidSelectionPositions;
             if(detectedPosition.Count <= 0)
                 return;
             agent.Blocked = true;

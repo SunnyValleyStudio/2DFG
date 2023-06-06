@@ -14,14 +14,25 @@ namespace FarmGame.Tools
 
         }
 
+        public override void Equip(IAgent agent)
+        {
+            agent.FieldDetectorObject.StartChecking(ToolRange);
+        }
+
+        public override void PutAway(IAgent agent)
+        {
+            agent.FieldDetectorObject.StopChecking();
+        }
+
         public override void UseTool(IAgent agent)
         {
             IEnumerable<IInteractable> interactables = null;
             if (agent.FieldDetectorObject.IsNearField)
             {
-                List<Vector2> detectedPositions = agent.FieldDetectorObject.DetectValidTiles();
-                if (detectedPositions.Count > 0)
-                    interactables = agent.InteractionDetector.PerformDetection(detectedPositions[0]);
+                if (agent.FieldDetectorObject.ValidSelectionPositions.Count > 0)
+                    interactables = 
+                        agent.InteractionDetector.
+                        PerformDetection(agent.FieldDetectorObject.ValidSelectionPositions[0]);
             }
             if (interactables == null)
                 interactables = agent.InteractionDetector.PerformDetection();

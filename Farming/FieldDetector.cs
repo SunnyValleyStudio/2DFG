@@ -61,7 +61,7 @@ namespace FarmGame.Farming
 			_oldCoroutine = StartCoroutine(CheckField(detectionRange));
 
         }
-        private void StopChecking()
+        public void StopChecking()
         {
             if(_oldCoroutine != null )
 				StopCoroutine(_oldCoroutine);

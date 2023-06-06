@@ -10,11 +10,15 @@ namespace FarmGame.Tools
         public ToolType ToolType { get; }
 
         public RuntimeAnimatorController ToolAnimator { get; set; }
+        public Vector2Int ToolRange { get; set; } = Vector2Int.one;
 
         protected Tool(ToolType toolType)
         {
             this.ToolType = toolType;
         }
+
+        public virtual void PutAway(IAgent agent) { }
+        public virtual void Equip(IAgent agent) { }
 
         public abstract void UseTool(IAgent agent);
     }
