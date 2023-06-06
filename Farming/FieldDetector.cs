@@ -26,6 +26,9 @@ namespace FarmGame.Farming
 
 		[SerializeField]
 		private FieldPositionValidator _fieldPositionValidator;
+        internal Action OnFieldExited;
+        internal Action OnResetDetectedFields;
+        internal Action<IEnumerable<Vector2>> OnPositionDetected;
 
         private void Awake()
         {
