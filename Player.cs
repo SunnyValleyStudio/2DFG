@@ -88,6 +88,11 @@ namespace FarmGame.Agent
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
         }
 
+        private void Start()
+        {
+            _selectedTool.Equip(this);
+        }
+
         private void PerformAction()
         {
             Debug.Log("Interacting");
