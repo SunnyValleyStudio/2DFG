@@ -12,7 +12,14 @@ namespace FarmGame.Farming
 		public bool IsNearField
 		{
 			get { return _isNearField; }
-			set { _isNearField = value; }
+			private set { 
+				_isNearField = value; 
+				if(_isNearField == false)
+				{
+					_validSelectionPositions = new();
+					OnFieldExited?.Invoke();
+				}
+			}
 		}
 
 		[SerializeField]
@@ -26,17 +33,58 @@ namespace FarmGame.Farming
 
 		[SerializeField]
 		private FieldPositionValidator _fieldPositionValidator;
-        internal Action OnFieldExited;
-        internal Action OnResetDetectedFields;
-        internal Action<IEnumerable<Vector2>> OnPositionDetected;
+        public event Action OnFieldExited;
+        public event Action OnResetDetectedFields;
+        public event Action<IEnumerable<Vector2>> OnPositionsDetected;
 
-        private void Awake()
+		[SerializeField]
+		private float _checkDelay = 0.01f;
+		Coroutine _oldCoroutine = null;
+		private List<Vector2> _validSelectionPositions = new();
+
+		public List<Vector2> ValidSelectionPositions
+		{
+			get { return _validSelectionPositions; }
+		}
+
+		private void Awake()
         {
             _fieldPositionValidator = FindObjectOfType<FieldPositionValidator>();
 			if (_fieldPositionValidator == null)
 				Debug.LogWarning("Field positon will not be validated without Field Position Validator"
 					, gameObject);
         }
+
+		public void StartChecking(Vector2Int detectionRange)
+		{
+			StopChecking();
+			_oldCoroutine = StartCoroutine(CheckField(detectionRange));
+
+        }
+        private void StopChecking()
+        {
+            if(_oldCoroutine != null )
+				StopCoroutine(_oldCoroutine);
+        }
+
+        private IEnumerator CheckField(Vector2Int detectionRange)
+        {
+            if(_isNearField && 
+				_fieldPositionValidator != null &&
+				_fieldPositionValidator.IsItFieldTile(PositionInFront))
+			{
+				_validSelectionPositions = DetectValidTiles(detectionRange);
+				OnPositionsDetected?.Invoke(ValidSelectionPositions);
+			}
+			else
+			{
+				_validSelectionPositions.Clear();
+				OnResetDetectedFields?.Invoke();
+			}
+			yield return new WaitForSeconds(_checkDelay);
+			_oldCoroutine = StartCoroutine(CheckField(detectionRange));
+        }
+
 
         public void SetInteractionDirection(Vector2 direction)
 		{
@@ -49,13 +97,13 @@ namespace FarmGame.Farming
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.CompareTag(_fieldTag))
-				_isNearField = true;
+				IsNearField = true;
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
             if (collision.CompareTag(_fieldTag))
-                _isNearField = false;
+                IsNearField = false;
         }
 
         private void OnDrawGizmosSelected()
@@ -72,10 +120,12 @@ namespace FarmGame.Farming
 			}
         }
 
-        public List<Vector2> DetectValidTiles()
+        public List<Vector2> DetectValidTiles(Vector2Int detectionRange)
         {
 			if (_fieldPositionValidator == null)
 				return new List<Vector2>();
+			if(detectionRange.magnitude > 2)
+				throw new NotImplementedException("Detection range greater than (1,1) NOT implemented");
 			return _fieldPositionValidator.GetValidFieldTiles(new List<Vector2>() { PositionInFront } );
         }
     }

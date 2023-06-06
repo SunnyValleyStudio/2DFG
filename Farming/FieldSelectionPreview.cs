@@ -24,7 +24,7 @@ namespace FarmGame.Farming
             }
             _fieldDetector.OnFieldExited += HideAllIcons;
             _fieldDetector.OnResetDetectedFields += HideAllIcons;
-            _fieldDetector.OnPositionDetected += UpdateIcons;
+            _fieldDetector.OnPositionsDetected += UpdateIcons;
         }
 
         private void OnDisable()
@@ -33,7 +33,7 @@ namespace FarmGame.Farming
                 return;
             _fieldDetector.OnFieldExited -= HideAllIcons;
             _fieldDetector.OnResetDetectedFields -= HideAllIcons;
-            _fieldDetector.OnPositionDetected -= UpdateIcons;
+            _fieldDetector.OnPositionsDetected -= UpdateIcons;
         }
 
         private void HideAllIcons()
