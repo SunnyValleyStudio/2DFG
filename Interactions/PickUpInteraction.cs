@@ -16,7 +16,7 @@ namespace FarmGame.Interactions
         public UnityEvent OnPickUp;
 
         public bool CanInteract(IAgent agent)
-            => UsableTools.Contains(agent.SelectedTool.ToolType);
+            => UsableTools.Contains(agent.ToolsBag.CurrentTool.ToolType);
 
         public void Interact(IAgent agent)
         {

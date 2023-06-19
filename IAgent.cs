@@ -13,7 +13,7 @@ namespace FarmGame.Agent
         bool Blocked { get; set; }
         FieldDetector FieldDetectorObject { get; }
         InteractionDetector InteractionDetector { get; }
-        Tool SelectedTool { get; }
+        ToolsBag ToolsBag { get; }
         FieldController FieldController { get; }
     }
 }

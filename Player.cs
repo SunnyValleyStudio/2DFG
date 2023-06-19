@@ -25,8 +25,6 @@ namespace FarmGame.Agent
         [SerializeField]
         private ItemDatabaseSO _itemDatabase;
 
-        private Tool _selectedTool; //= new HoeTool(ToolType.Hoe);
-        //private Tool _selectedTool = new HandTool(ToolType.Hand);
 
         [SerializeField]
         private FieldController _fieldController;
@@ -70,10 +68,8 @@ namespace FarmGame.Agent
         {
             get => _interactionDetector;
         }
-        public Tool SelectedTool
-        {
-            get => _selectedTool;
-        }
+        [field:SerializeField]
+        public ToolsBag ToolsBag { get; private set; }
 
         public FieldController FieldController => _fieldController;
 
@@ -91,14 +87,13 @@ namespace FarmGame.Agent
 
         private void Start()
         {
-            _selectedTool = ToolFactory.CreateTool(_itemDatabase.GetItemData(3));
-            _selectedTool.Equip(this);
+            ToolsBag.Initialize(this);
         }
 
         private void PerformAction()
         {
             Debug.Log("Interacting");
-            _selectedTool.UseTool(this);
+            ToolsBag.CurrentTool.UseTool(this);
         }
 
 
