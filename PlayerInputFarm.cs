@@ -14,13 +14,19 @@ namespace FarmGame.Input
         [field : SerializeField]
         public Vector2 InputValue { get; private set; }
         public UnityEvent<Vector2> OnMoveInput;
-        public event Action OnPerformAction;
+        public event Action OnPerformAction, OnSwapTool;
 
         private void OnEnable()
         {
             _input.actions["Player/Movement"].performed += Move;
             _input.actions["Player/Movement"].canceled += Move;
             _input.actions["Player/Interact"].performed += Interact;
+            _input.actions["Player/SwapTool"].performed += SwapTool;
+        }
+
+        private void SwapTool(InputAction.CallbackContext obj)
+        {
+            OnSwapTool?.Invoke();
         }
 
         public void BlockInput(bool val)
@@ -55,6 +61,7 @@ namespace FarmGame.Input
             _input.actions["Player/Movement"].performed -= Move;
             _input.actions["Player/Movement"].canceled -= Move;
             _input.actions["Player/Interact"].performed -= Interact;
+            _input.actions["Player/SwapTool"].performed -= SwapTool;
         }
     }
 }

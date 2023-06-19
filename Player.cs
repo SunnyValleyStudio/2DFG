@@ -81,13 +81,20 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.AddListener(_interactionDetector.SetInteractionDirection);
             _agentInput.OnMoveInput.AddListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction += PerformAction;
+            _agentInput.OnSwapTool += SwapTool;
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
+            
         }
 
         private void Start()
         {
             ToolsBag.Initialize(this);
+        }
+
+        private void SwapTool()
+        {
+            ToolsBag.SelectNextTool(this);
         }
 
         private void PerformAction()
@@ -105,6 +112,7 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.RemoveListener(_interactionDetector.SetInteractionDirection);
             _agentInput.OnMoveInput.RemoveListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction -= PerformAction;
+            _agentInput.OnSwapTool -= SwapTool;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
         }
