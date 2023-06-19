@@ -1,3 +1,4 @@
+using FarmGame.DataStorage;
 using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
@@ -22,9 +23,9 @@ namespace FarmGame.Agent
         private InteractionDetector _interactionDetector;
 
         [SerializeField]
-        private RuntimeAnimatorController _hoeAnimatorController;
+        private ItemDatabaseSO _itemDatabase;
 
-        private Tool _selectedTool = new HoeTool(ToolType.Hoe);
+        private Tool _selectedTool; //= new HoeTool(ToolType.Hoe);
         //private Tool _selectedTool = new HandTool(ToolType.Hand);
 
         [SerializeField]
@@ -90,13 +91,13 @@ namespace FarmGame.Agent
 
         private void Start()
         {
+            _selectedTool = ToolFactory.CreateTool(_itemDatabase.GetItemData(3));
             _selectedTool.Equip(this);
         }
 
         private void PerformAction()
         {
             Debug.Log("Interacting");
-            _selectedTool.ToolAnimator = _hoeAnimatorController;
             _selectedTool.UseTool(this);
         }
 
