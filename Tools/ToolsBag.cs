@@ -20,6 +20,7 @@ namespace FarmGame.Tools
         private Tool _currentTool;
 
         public Tool CurrentTool => _currentTool;
+        public event Action<int, List<Sprite>, int?> OnToolsBagUpdated;
 
         public void Initialize(IAgent agent)
         {
@@ -46,6 +47,21 @@ namespace FarmGame.Tools
             Debug.Log($" Equipped tool: {description.Name}");
             _currentTool = ToolFactory.CreateTool(description);
             EquipTool(agent);
+            SendUpdateMessage();
+        }
+
+        private void SendUpdateMessage()
+        {
+            List<Sprite> sprites = new List<Sprite>();
+            foreach (int ID in _initialTools)
+            {
+                ItemDescription toolDescription = _itemDatabase.GetItemData(ID);
+                if(toolDescription != null)
+                {
+                    sprites.Add(toolDescription.Image);
+                }
+            }
+            OnToolsBagUpdated?.Invoke(_selectedIndex, sprites, null);
         }
 
         private void EquipTool(IAgent agent)

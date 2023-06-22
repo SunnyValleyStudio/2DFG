@@ -3,6 +3,7 @@ using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
 using FarmGame.Tools;
+using FarmGame.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,9 +26,11 @@ namespace FarmGame.Agent
         [SerializeField]
         private ItemDatabaseSO _itemDatabase;
 
-
         [SerializeField]
         private FieldController _fieldController;
+
+        [SerializeField]
+        private ToolSelectionUI _toolSelectionUI;
 
         private bool _blocked = false;
 
@@ -84,6 +87,8 @@ namespace FarmGame.Agent
             _agentInput.OnSwapTool += SwapTool;
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
+
+            ToolsBag.OnToolsBagUpdated += _toolSelectionUI.UpdateUI;
             
         }
 
@@ -115,6 +120,8 @@ namespace FarmGame.Agent
             _agentInput.OnSwapTool -= SwapTool;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
+
+            ToolsBag.OnToolsBagUpdated -= _toolSelectionUI.UpdateUI;
         }
     }
 }
