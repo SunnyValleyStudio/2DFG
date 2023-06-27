@@ -101,6 +101,84 @@ namespace FarmGame.DataStorage.Inventory
             }
             return quantityRemaining;
         }
+
+        public bool IsThereSpace(InventoryItemData item, int stackSize)
+        {
+            if(stackSize > 1)
+            {
+                return _inventoryContent.Any(data => data == null)
+                    || _inventoryContent.Where(
+                        data => data.id == item.id && data.count + item.count <= stackSize)
+                    .Count() > 0;
+            }
+            return _inventoryContent.Any(data => data == null);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new();
+            sb.Append("Inventory content: ");
+            foreach (var item in InventoryContent)
+            {
+                if (item == null)
+                    sb.Append("NULL, ");
+                else
+                    sb.Append(item.id + $"({item.count}), ");
+            }
+            return sb.ToString();
+        }
+
+        public InventoryItemData GetItemDataAt(int index)
+        {
+            if(index >= _capacity || index < 0)
+            {
+                return null;
+            }
+            return _inventoryContent[index];
+        }
+
+        public bool SetItemDataAt(int index, InventoryItemData item)
+        {
+            if (index >= _capacity || index < 0)
+            {
+                return false;
+            }
+            _inventoryContent[index] = item;
+            OnUpdateInventory?.Invoke(InventoryContent);
+            return true;
+        }
+
+        public void RemoveAllItem(InventoryItemData item)
+        {
+            int index = Array.IndexOf(_inventoryContent, item);
+            if(index > -1)
+            {
+                _inventoryContent[index] = null;
+                OnUpdateInventory?.Invoke(InventoryContent);
+            }
+        }
+
+        public bool RemoveAllItemAt(int index)
+        {
+            if (index >= _capacity || index < 0)
+            {
+                return false;
+            }
+            _inventoryContent[index] = null;
+            OnUpdateInventory?.Invoke(InventoryContent);
+            return true;
+        }
+
+        public bool AddItemAt(int index, InventoryItemData item)
+        {
+            if(index >= _capacity || index < 0)
+            {
+                return false;
+            }
+            _inventoryContent[index] = item;
+            OnUpdateInventory?.Invoke(InventoryContent);
+            return true; 
+        }
     }
 
     public record InventoryItemData(int id, int count, int quality, string data = null);
