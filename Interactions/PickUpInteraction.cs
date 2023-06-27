@@ -1,4 +1,5 @@
 using FarmGame.Agent;
+using FarmGame.DataStorage.Inventory;
 using FarmGame.Tools;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace FarmGame.Interactions
 
         public void Interact(IAgent agent)
         {
+            agent.Inventory.AddItem(new InventoryItemData(0, 1, -1), 1);
+            Debug.Log(agent.Inventory);
             OnPickUp?.Invoke();
             Destroy(gameObject);
         }

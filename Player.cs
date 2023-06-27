@@ -1,4 +1,5 @@
 using FarmGame.DataStorage;
+using FarmGame.DataStorage.Inventory;
 using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
@@ -47,6 +48,16 @@ namespace FarmGame.Agent
                 _agentInput.BlockInput(_blocked);
             }
         }
+
+        [SerializeField]
+        private Inventory _inventory;
+
+        public Inventory Inventory
+        {
+            get => _inventory;
+        }
+
+
         [SerializeField]
         private FieldDetector _fieldDetector;
 
