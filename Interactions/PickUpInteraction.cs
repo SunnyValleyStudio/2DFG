@@ -24,6 +24,10 @@ namespace FarmGame.Interactions
 
         public UnityEvent OnPickUp;
 
+        private void Awake()
+        {
+            _data = GetComponent<ItemData>();
+        }
         public bool CanInteract(IAgent agent)
             => UsableTools.Contains(agent.ToolsBag.CurrentTool.ToolType);
 
