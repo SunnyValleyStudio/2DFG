@@ -59,12 +59,29 @@ namespace FarmGame.UI
 
         internal void SelectItem(int selctedItemIndex)
         {
-            Debug.Log("Show OUTLINE");
+            GetItemAt(selctedItemIndex).Outline.SetOutline(true, Mode.Select);
         }
 
         internal void ResetAllSelection(bool v)
         {
-            Debug.Log("Reset OUTLINE");
+            for (int i = 0; i < _inventoryItems.Count; i++)
+            {
+                ItemControllerUI controller = GetItemAt(i);
+                if(v == false && controller.Outline.IsMarked)
+                {
+                    MarkItem(i, true);
+                    continue;
+                }
+                controller.Outline.SetOutline(false);
+            }
+        }
+
+        private void MarkItem(int itemIndex, bool resetSelection = true)
+        {
+            ItemControllerUI controller = GetItemAt(itemIndex);
+            if (resetSelection)
+                controller.Outline.SetOutline(false);
+            controller.Outline.SetOutline(true, Mode.Mark);
         }
     }
 }
