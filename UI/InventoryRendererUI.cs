@@ -17,7 +17,7 @@ namespace FarmGame.UI
         [SerializeField]
         private int _rowSize = 7;
         public int RowSize { get => _rowSize; }
-        public int INventoryItemCount => _inventoryItems.Count;
+        public int InventoryItemCount => _inventoryItems.Count;
 
         public void PrepareItemsToShow(int capacity)
         {
@@ -55,6 +55,16 @@ namespace FarmGame.UI
             {
                 item.ResetData();
             }
+        }
+
+        internal void SelectItem(int selctedItemIndex)
+        {
+            Debug.Log("Show OUTLINE");
+        }
+
+        internal void ResetAllSelection(bool v)
+        {
+            Debug.Log("Reset OUTLINE");
         }
     }
 }
