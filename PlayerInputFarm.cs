@@ -14,7 +14,7 @@ namespace FarmGame.Input
         [field : SerializeField]
         public Vector2 InputValue { get; private set; }
         public UnityEvent<Vector2> OnMoveInput;
-        public event Action OnPerformAction, OnSwapTool;
+        public event Action OnPerformAction, OnSwapTool, OnToggleInventory;
 
         private void OnEnable()
         {
@@ -22,6 +22,12 @@ namespace FarmGame.Input
             _input.actions["Player/Movement"].canceled += Move;
             _input.actions["Player/Interact"].performed += Interact;
             _input.actions["Player/SwapTool"].performed += SwapTool;
+            _input.actions["Player/ToggleInventory"].performed += ToggleInventory;
+        }
+
+        private void ToggleInventory(InputAction.CallbackContext obj)
+        {
+            OnToggleInventory?.Invoke();
         }
 
         private void SwapTool(InputAction.CallbackContext obj)
@@ -62,6 +68,7 @@ namespace FarmGame.Input
             _input.actions["Player/Movement"].canceled -= Move;
             _input.actions["Player/Interact"].performed -= Interact;
             _input.actions["Player/SwapTool"].performed -= SwapTool;
+            _input.actions["Player/ToggleInventory"].performed -= ToggleInventory;
         }
     }
 }

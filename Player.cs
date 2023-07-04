@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace FarmGame.Agent
 {
@@ -87,6 +88,8 @@ namespace FarmGame.Agent
 
         public FieldController FieldController => _fieldController;
 
+        public UnityEvent OnToggleInventory;
+
         private void OnEnable()
         {
             _agentInput.OnMoveInput.AddListener(_agentMover.SetMovementInput);
@@ -96,11 +99,16 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.AddListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction += PerformAction;
             _agentInput.OnSwapTool += SwapTool;
+            _agentInput.OnToggleInventory += ToggleInventory;
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
 
             ToolsBag.OnToolsBagUpdated += _toolSelectionUI.UpdateUI;
-            
+        }
+
+        private void ToggleInventory()
+        {
+            OnToggleInventory?.Invoke();
         }
 
         private void Start()
@@ -129,6 +137,7 @@ namespace FarmGame.Agent
             _agentInput.OnMoveInput.RemoveListener(_fieldDetector.SetInteractionDirection);
             _agentInput.OnPerformAction -= PerformAction;
             _agentInput.OnSwapTool -= SwapTool;
+            _agentInput.OnToggleInventory -= ToggleInventory;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
 
