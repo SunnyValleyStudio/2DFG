@@ -44,7 +44,7 @@ namespace FarmGame.DataStorage
             if(ToolType == ToolType.None && CropTypeIndex == -1) 
             {
                 if (Price > 0)
-                    sb.Append($"Price: {Prefab} $ \n");
+                    sb.Append($"Price: {Price} $ \n");
                 if (Consumable)
                     sb.Append($"Energy Boost: {EnergyBoost} \n");
             }

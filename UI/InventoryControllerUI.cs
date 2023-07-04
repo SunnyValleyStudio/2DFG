@@ -23,6 +23,12 @@ namespace FarmGame.UI
 
         private InventoryRendererUI _inventoryRenderer;
 
+        private Inventory _inventoryTempReference;
+        [SerializeField]
+        private ItemSelectionUI _itemSelection;
+        [SerializeField]
+        private ItemDescriptionUI _itemDescription;
+
         private void Awake()
         {
             _inventoryRenderer = GetComponent<InventoryRendererUI>();
@@ -37,6 +43,10 @@ namespace FarmGame.UI
 
             _inventoryRenderer.PrepareItemsToShow(inventory.Capacity);
             _inventoryRenderer.ResetItems();
+
+            _inventoryTempReference = inventory;
+            _inventoryTempReference.OnUpdateInventory += UpdateInventoryItems;
+            _itemSelection.EnableController(_input);
 
             UpdateInventoryItems(inventory.InventoryContent);
         }
@@ -56,12 +66,26 @@ namespace FarmGame.UI
             }
         }
 
+        public void UpdateDescription(int selectedItemIndex)
+        {
+            InventoryItemData item = _inventoryTempReference.GetItemDataAt(selectedItemIndex);
+            ItemDescription descriptionData = item == null ? null :
+                _itemDatabase.GetItemData(item.id);
+            if (descriptionData == null)
+                _itemDescription.ResetDescription();
+            else
+                _itemDescription.UpdateDescription(descriptionData.Image, descriptionData.Name,
+                    _itemDatabase.GetItemDescription(item.id));
+        }
+
         private void ExitInventory()
         {
             _input.EnableDefaultActionMap();
             _input.OnUIExit -= ExitInventory;
             _input.OnUIToggleInventory -= ExitInventory;
             _inventoryCanvas.SetActive(false);
+            _inventoryTempReference.OnUpdateInventory -= UpdateInventoryItems;
+            _itemSelection.DisableController(_input);
         }
     }
 }
