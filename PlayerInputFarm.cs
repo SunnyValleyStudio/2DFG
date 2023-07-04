@@ -15,6 +15,8 @@ namespace FarmGame.Input
         public Vector2 InputValue { get; private set; }
         public UnityEvent<Vector2> OnMoveInput;
         public event Action OnPerformAction, OnSwapTool, OnToggleInventory;
+        public event Action OnUIExit, OnUIToggleInventory, OnUIInteract;
+        public event Action<Vector2> OnUIMoveInput;
 
         private void OnEnable()
         {
@@ -23,6 +25,32 @@ namespace FarmGame.Input
             _input.actions["Player/Interact"].performed += Interact;
             _input.actions["Player/SwapTool"].performed += SwapTool;
             _input.actions["Player/ToggleInventory"].performed += ToggleInventory;
+
+            _input.actions["UI/Movement"].performed += MoveUI;
+            _input.actions["UI/Interact"].performed += InteractUI;
+            _input.actions["UI/Exit"].performed += ExitUI;
+            _input.actions["UI/ToggleInventory"].performed += ToggleInventoryUI;
+        }
+
+        private void ExitUI(InputAction.CallbackContext obj)
+        {
+            OnUIExit?.Invoke();
+        }
+
+        private void ToggleInventoryUI(InputAction.CallbackContext obj)
+        {
+            OnUIToggleInventory?.Invoke();
+        }
+
+        private void InteractUI(InputAction.CallbackContext obj)
+        {
+            OnUIInteract?.Invoke();
+        }
+
+        private void MoveUI(InputAction.CallbackContext obj)
+        {
+            Vector2 input = obj.ReadValue<Vector2>();
+            OnUIMoveInput?.Invoke(input);
         }
 
         private void ToggleInventory(InputAction.CallbackContext obj)
@@ -60,6 +88,15 @@ namespace FarmGame.Input
             OnMoveInput?.Invoke(InputValue);
         }
 
+        public void EnableUIActionMap()
+        {
+            _input.SwitchCurrentActionMap("UI");
+        }
+
+        public void EnableDefaultActionMap()
+        {
+            _input.SwitchCurrentActionMap("Player");
+        }
 
 
         private void OnDisable()
@@ -69,6 +106,11 @@ namespace FarmGame.Input
             _input.actions["Player/Interact"].performed -= Interact;
             _input.actions["Player/SwapTool"].performed -= SwapTool;
             _input.actions["Player/ToggleInventory"].performed -= ToggleInventory;
+
+            _input.actions["UI/Movement"].performed -= MoveUI;
+            _input.actions["UI/Interact"].performed -= InteractUI;
+            _input.actions["UI/Exit"].performed -= ExitUI;
+            _input.actions["UI/ToggleInventory"].performed -= ToggleInventoryUI;
         }
     }
 }
