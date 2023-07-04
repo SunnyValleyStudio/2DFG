@@ -1,3 +1,4 @@
+using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
 using FarmGame.Input;
 using System;
@@ -14,6 +15,11 @@ namespace FarmGame.UI
         private PlayerInputFarm _input;
         [SerializeField]
         private GameObject _inventoryCanvas;
+
+        [SerializeField]
+        private InventoryItemUpdaterUI _inventoryItemUpdater;
+        [SerializeField]
+        private ItemDatabaseSO _itemDatabase;
 
         private InventoryRendererUI _inventoryRenderer;
 
@@ -32,6 +38,22 @@ namespace FarmGame.UI
             _inventoryRenderer.PrepareItemsToShow(inventory.Capacity);
             _inventoryRenderer.ResetItems();
 
+            UpdateInventoryItems(inventory.InventoryContent);
+        }
+
+        private void UpdateInventoryItems(IEnumerable<InventoryItemData> inventoryContent)
+        {
+            _inventoryRenderer.ResetItems();
+            int index = 0;
+            foreach (InventoryItemData item in inventoryContent)
+            {
+                if(item != null)
+                {
+                    _inventoryItemUpdater.UpdateElement(index, _itemDatabase.GetItemData(item.id),
+                        item);
+                }
+                index++;
+            }
         }
 
         private void ExitInventory()
