@@ -88,7 +88,7 @@ namespace FarmGame.Agent
 
         public FieldController FieldController => _fieldController;
 
-        public UnityEvent OnToggleInventory;
+        public UnityEvent<Inventory> OnToggleInventory;
 
         private void OnEnable()
         {
@@ -108,7 +108,7 @@ namespace FarmGame.Agent
 
         private void ToggleInventory()
         {
-            OnToggleInventory?.Invoke();
+            OnToggleInventory?.Invoke(Inventory);
         }
 
         private void Start()
