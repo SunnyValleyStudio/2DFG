@@ -9,8 +9,10 @@ namespace FarmGame.Tools
     {
         public int CropID { get; set; } = 0;
         private int _quantity = 1;
-        public SeedPlacementTool(ToolType toolType) : base(toolType)
+
+        public SeedPlacementTool(int itemID, string data) : base(itemID, data)
         {
+            this.ToolType = ToolType.SeedPlacer;
         }
 
         public override void Equip(IAgent agent)
@@ -48,6 +50,11 @@ namespace FarmGame.Tools
                 agent.Blocked = false;
             });
             agent.FieldController.PrintCropsStatus();
+        }
+
+        public override bool IsToolStillValid()
+        {
+            return _quantity > 0;
         }
     }
 }

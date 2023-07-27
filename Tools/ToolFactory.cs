@@ -7,16 +7,18 @@ namespace FarmGame.Tools
 {
     public static class ToolFactory
     { 
-        public static Tool CreateTool(ItemDescription description) 
+        public static Tool CreateTool(ItemDescription description, string data = null) 
         {
             Tool tool = description.ToolType switch
             {
-                ToolType.Hand => new HandTool(description.ToolType),
-                ToolType.Hoe => new HoeTool(description.ToolType),
+                ToolType.Hand => new HandTool(description.ID,data),
+                ToolType.Hoe => new HoeTool(description.ID, data),
+                ToolType.SeedPlacer => new SeedPlacementTool(description.ID, data),
                 _ => throw new System.NotImplementedException(
-                    $"TOoType is not defined in the ToolFactory {description.ToolType}")
+                    $"ToolType is not defined in the ToolFactory {description.ToolType}")
             };
             tool.ToolAnimator = description.ToolAnimator;
+            tool.ToolRange = description.ToolRange;
             return tool;
         }
     }

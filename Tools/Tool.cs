@@ -8,17 +8,26 @@ namespace FarmGame.Tools
 {
     public abstract class Tool
     {
-        public ToolType ToolType { get; }
+        public ToolType ToolType { get; protected set; }
         public Action OnPerformedAction, OnStartedAction;
         public Action<IAgent> OnFinishedActon;
 
         public RuntimeAnimatorController ToolAnimator { get; set; }
         public Vector2Int ToolRange { get; set; } = Vector2Int.one;
 
-        protected Tool(ToolType toolType)
+        public int ItemIndex { get; set; }
+        protected Tool(int itemID, string data)
         {
-            this.ToolType = toolType;
+            this.ItemIndex = itemID;
+            RestoreSavedData();
         }
+
+        public virtual void RestoreSavedData()
+        {
+        }
+
+        public virtual string GetDataToSave() => String.Empty;
+        public abstract bool IsToolStillValid();
 
         public virtual void PutAway(IAgent agent) { }
         public virtual void Equip(IAgent agent) { }

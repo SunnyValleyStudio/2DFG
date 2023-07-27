@@ -8,15 +8,19 @@ namespace FarmGame.Tools
 {
     public class HandTool : Tool
     {
-
-        public HandTool(ToolType toolType) : base(toolType)
+        public HandTool(int itemID, string data) : base(itemID, data)
         {
-
+            this.ToolType = ToolType.Hand;
         }
 
         public override void Equip(IAgent agent)
         {
             agent.FieldDetectorObject.StartChecking(ToolRange);
+        }
+
+        public override bool IsToolStillValid()
+        {
+            return true;
         }
 
         public override void PutAway(IAgent agent)
@@ -62,6 +66,7 @@ namespace FarmGame.Tools
     {
         None,
         Hand,
-        Hoe
+        Hoe,
+        SeedPlacer
     }
 }
