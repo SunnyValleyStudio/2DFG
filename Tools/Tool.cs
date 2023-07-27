@@ -1,4 +1,5 @@
 using FarmGame.Agent;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace FarmGame.Tools
     public abstract class Tool
     {
         public ToolType ToolType { get; }
+        public Action OnPerformedAction, OnStartedAction;
+        public Action<IAgent> OnFinishedActon;
 
         public RuntimeAnimatorController ToolAnimator { get; set; }
         public Vector2Int ToolRange { get; set; } = Vector2Int.one;

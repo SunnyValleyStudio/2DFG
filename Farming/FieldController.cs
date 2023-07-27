@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,21 @@ namespace FarmGame.Farming
             _fieldRenderer.PrepareFieldAt(tilePositon);
             _preparedFields.Add(tilePositon);
             _audioSource.PlayOneShot(_preparedFieldSound);
+        }
+
+        internal bool CanIPlaceCropsHere(Vector2 pos)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void PlaceCropAt(Vector2 pos, int cropID)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void PrintCropsStatus()
+        {
+            throw new NotImplementedException();
         }
     }
 }
