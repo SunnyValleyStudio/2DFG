@@ -1,3 +1,4 @@
+using FarmGame.DataStorage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,44 +10,74 @@ namespace FarmGame.Farming
     {
         private FieldRenderer _fieldRenderer;
         [SerializeField]
-        private List<Vector3Int> _preparedFields = new();
+        private FieldData _fieldData;
+        [SerializeField]
+        private CropDataBaseSO _cropDatabase;
 
         [SerializeField]
         private AudioSource _audioSource;
         [SerializeField]
-        private AudioClip _preparedFieldSound;
+        private AudioClip _preparedFieldSound, _placeSeedSound;
 
         private void Awake()
         {
             _fieldRenderer = FindObjectOfType<FieldRenderer>(true);
+            if(_fieldData == null)
+            {
+                _fieldData = FindObjectOfType<FieldData>();
+                if (_fieldData == null)
+                    Debug.LogError("Can't find Field Data", gameObject);
+            }
         }
 
         public void PrepareFieldAt(Vector2 worldPosition)
         {
             if(_fieldRenderer == null) return;
             Vector3Int tilePositon = _fieldRenderer.GetTilemapTilePosition(worldPosition);
-            if(_preparedFields.Contains(tilePositon) )
+            if(_fieldData.crops.ContainsKey(tilePositon) )
             {
                 return;
             }
             _fieldRenderer.PrepareFieldAt(tilePositon);
-            _preparedFields.Add(tilePositon);
+            _fieldData.preparedFields.Add(tilePositon);
             _audioSource.PlayOneShot(_preparedFieldSound);
         }
 
-        internal bool CanIPlaceCropsHere(Vector2 pos)
+        public bool CanIPlaceCropsHere(Vector2 position)
         {
-            throw new NotImplementedException();
+            Vector3Int tilePosition = _fieldRenderer.GetTilemapTilePosition(position);
+            return _fieldData.preparedFields.Contains(tilePosition) &&
+                _fieldData.crops.ContainsKey(tilePosition) == false;
         }
 
-        internal void PlaceCropAt(Vector2 pos, int cropID)
+        public void PlaceCropAt(Vector2 position, int cropID, int growthLevel = 0
+            , bool playSound = true)
         {
-            throw new NotImplementedException();
+            if (_fieldRenderer == null)
+                return;
+            Vector3Int tilePosition = _fieldRenderer.GetTilemapTilePosition(position);
+            if(_fieldData.crops.ContainsKey(tilePosition) == false)
+            {
+                _fieldData.crops[tilePosition] = new Crop(cropID);
+            }
+            CropData data = _cropDatabase.GetDataForID(cropID);
+            if(data == null) 
+            {
+                Debug.LogError($"No data found for id {cropID} ");
+                return;
+            }
+            Debug.Log("Creating visualization for the crop");
+            if(playSound )
+            {
+                _audioSource.PlayOneShot(_placeSeedSound);
+            }
+            PrintCropsStatus();
+
         }
 
-        internal void PrintCropsStatus()
+        public void PrintCropsStatus()
         {
-            throw new NotImplementedException();
+            _fieldData.PrintCropStatus();
         }
     }
 }
