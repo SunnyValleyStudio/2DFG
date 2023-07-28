@@ -67,6 +67,8 @@ namespace FarmGame.Farming
                 return;
             }
             Debug.Log("Creating visualization for the crop");
+            _fieldRenderer.CreateCropVisualization(tilePosition, data.Sprites[growthLevel],
+                growthLevel > 0);
             if(playSound )
             {
                 _audioSource.PlayOneShot(_placeSeedSound);
