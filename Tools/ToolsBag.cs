@@ -35,6 +35,7 @@ namespace FarmGame.Tools
             {
                 ItemDescription description = _itemDatabase.GetItemData(_initialTools[i]);
                 string data = null;
+                int quantity = 1;
                 if(description.ToolType == ToolType.SeedPlacer)
                 {
                     data = JsonUtility.ToJson(new SeedToolData
@@ -42,9 +43,10 @@ namespace FarmGame.Tools
                         cropID = description.CropTypeIndex,
                         quantity = 2
                     });
+                    quantity = 2;
                 }
-                _toolsBagInventory.AddItem(new InventoryItemData(description.ID, 1, -1, data),
-                    description.StackQuantity);
+                _toolsBagInventory.AddItem(new InventoryItemData(description.ID, quantity, 
+                    -1, data), description.StackQuantity);
             }
             UpdateToolsBag(_toolsBagInventory.InventoryContent);
         }
@@ -53,6 +55,7 @@ namespace FarmGame.Tools
         {
             _newBag = new();
             AddDefaultHandTool();
+            int index = 0;
             foreach (InventoryItemData tool in inventoryContent) 
             { 
                 if(tool != null)
@@ -63,8 +66,16 @@ namespace FarmGame.Tools
                         Debug.LogError($"LOaded tool with index {tool.id} is not present in database or None");
                     }
                     Tool newTool = ToolFactory.CreateTool(toolDescription, tool.data);
+                    if(newTool is IQuantity)
+                    {
+                        ((IQuantity)newTool).Quantity = tool.count;
+                        _toolsBagInventory.AddItemAt(index,
+                            new InventoryItemData(toolDescription.ID, tool.count, tool.quality,
+                            newTool.GetDataToSave()));
+                    }
                     _newBag.Add(newTool);
                 }
+                index++;
             }
             if(_selectedIndex >= _newBag.Count)
                 _selectedIndex = 0;
@@ -108,6 +119,13 @@ namespace FarmGame.Tools
 
         private void SendUpdateMessage()
         {
+            int? count = null;
+            ItemDescription selectedToolDescription =
+                _itemDatabase.GetItemData(_newBag[_selectedIndex].ItemIndex);
+            if(selectedToolDescription.ToolType == ToolType.SeedPlacer)
+            {
+                count = _toolsBagInventory.GetItemDataAt(_selectedIndex - 1).count;
+            }
             List<Sprite> sprites = new List<Sprite>();
             foreach (Tool tool in _newBag)
             {
@@ -117,7 +135,7 @@ namespace FarmGame.Tools
                     sprites.Add(toolDescription.Image);
                 }
             }
-            OnToolsBagUpdated?.Invoke(_selectedIndex, sprites, null);
+            OnToolsBagUpdated?.Invoke(_selectedIndex, sprites, count);
         }
 
         private void EquipTool(IAgent agent)
@@ -138,8 +156,13 @@ namespace FarmGame.Tools
                 if (tool.IsToolStillValid())
                 {
                     //modified the item
+                    int quantity = 1;
+                    if(tool is IQuantity)
+                    {
+                        quantity = ((IQuantity)tool).Quantity;
+                    }
                     _toolsBagInventory.AddItemAt(inventoryIndex
-                        , new InventoryItemData(tool.ItemIndex, 1, -1, data));
+                        , new InventoryItemData(tool.ItemIndex, quantity, -1, data));
                 }
                 else
                 {

@@ -6,10 +6,15 @@ using UnityEngine;
 
 namespace FarmGame.Tools
 {
-    public class SeedPlacementTool : Tool
+    public class SeedPlacementTool : Tool, IQuantity
     {
         public int CropID { get; set; } = 0;
         private int _quantity = 1;
+        public int Quantity
+        {
+            get => _quantity;
+            set { _quantity = value; }
+        }
 
         public SeedPlacementTool(int itemID, string data) : base(itemID, data)
         {
