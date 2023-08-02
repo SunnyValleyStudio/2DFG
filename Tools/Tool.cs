@@ -19,10 +19,10 @@ namespace FarmGame.Tools
         protected Tool(int itemID, string data)
         {
             this.ItemIndex = itemID;
-            RestoreSavedData();
+            RestoreSavedData(data);
         }
 
-        public virtual void RestoreSavedData()
+        public virtual void RestoreSavedData(string data)
         {
         }
 

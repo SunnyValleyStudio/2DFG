@@ -34,7 +34,16 @@ namespace FarmGame.Tools
             for (int i = 0; i < _initialTools.Count; i++)
             {
                 ItemDescription description = _itemDatabase.GetItemData(_initialTools[i]);
-                _toolsBagInventory.AddItem(new InventoryItemData(description.ID, 1, -1, null),
+                string data = null;
+                if(description.ToolType == ToolType.SeedPlacer)
+                {
+                    data = JsonUtility.ToJson(new SeedToolData
+                    {
+                        cropID = description.CropTypeIndex,
+                        quantity = 2
+                    });
+                }
+                _toolsBagInventory.AddItem(new InventoryItemData(description.ID, 1, -1, data),
                     description.StackQuantity);
             }
             UpdateToolsBag(_toolsBagInventory.InventoryContent);
@@ -146,9 +155,11 @@ namespace FarmGame.Tools
                         _toolsBagInventory.AddItem(items[i],
                             _itemDatabase.GetItemData(items[i].id).StackQuantity);
                     }
+                    UpdateToolsBag(_toolsBagInventory.InventoryContent);
                 }
+                SwapTool(_selectedIndex, agent);
             }
-            UpdateToolsBag(_toolsBagInventory.InventoryContent);
+            
         }
 
         private void PutAway(IAgent agent)

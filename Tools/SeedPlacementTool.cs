@@ -1,4 +1,5 @@
 using FarmGame.Agent;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,24 @@ namespace FarmGame.Tools
         public SeedPlacementTool(int itemID, string data) : base(itemID, data)
         {
             this.ToolType = ToolType.SeedPlacer;
+        }
+
+        public override string GetDataToSave()
+        {
+            return JsonUtility.ToJson(new SeedToolData
+            {
+                cropID = CropID,
+                quantity = _quantity
+            });
+        }
+
+        public override void RestoreSavedData(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                throw new System.Exception("Failed to create tool becasue data passed is null");
+            SeedToolData savedData = JsonUtility.FromJson<SeedToolData>(data);
+            CropID = savedData.cropID;
+            _quantity = savedData.quantity;
         }
 
         public override void Equip(IAgent agent)
@@ -56,5 +75,10 @@ namespace FarmGame.Tools
         {
             return _quantity > 0;
         }
+    }
+    [Serializable]
+    public struct SeedToolData
+    {
+        public int cropID, quantity;
     }
 }
