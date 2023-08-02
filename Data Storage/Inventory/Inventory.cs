@@ -179,6 +179,14 @@ namespace FarmGame.DataStorage.Inventory
             OnUpdateInventory?.Invoke(InventoryContent);
             return true; 
         }
+
+        internal void Clear()
+        {
+            for (int i = 0; i < _inventoryContent.Length; i++)
+            {
+                _inventoryContent[i] = null;
+            }
+        }
     }
 
     public record InventoryItemData(int id, int count, int quality, string data = null);

@@ -4,6 +4,7 @@ using FarmGame.DataStorage.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace FarmGame.Tools
@@ -113,11 +114,49 @@ namespace FarmGame.Tools
         private void EquipTool(IAgent agent)
         {
             _newBag[_selectedIndex].Equip(agent);
+            _newBag[_selectedIndex].OnFinishedActon += UpdateInventoryData;
+        }
+
+        private void UpdateInventoryData(IAgent agent)
+        {
+            Tool tool = _newBag[_selectedIndex];
+            string data = tool.GetDataToSave();
+            if (string.IsNullOrEmpty(data))
+                return;
+            int inventoryIndex = _selectedIndex - 1; // Hand is NOT in the inventory
+            if(inventoryIndex >= 0)
+            {
+                if (tool.IsToolStillValid())
+                {
+                    //modified the item
+                    _toolsBagInventory.AddItemAt(inventoryIndex
+                        , new InventoryItemData(tool.ItemIndex, 1, -1, data));
+                }
+                else
+                {
+                    //recreate the inventory
+                    List<InventoryItemData> items = _toolsBagInventory.InventoryContent.ToList();
+                    _toolsBagInventory.Clear();
+                    for (int i = 0; i < items.Count; i++) 
+                    { 
+                        if(i == inventoryIndex || items[i] == null)
+                        {
+                            continue;
+                        }
+                        _toolsBagInventory.AddItem(items[i],
+                            _itemDatabase.GetItemData(items[i].id).StackQuantity);
+                    }
+                }
+            }
+            UpdateToolsBag(_toolsBagInventory.InventoryContent);
         }
 
         private void PutAway(IAgent agent)
         {
             _newBag[_selectedIndex].PutAway(agent);
+            _newBag[_selectedIndex].OnFinishedActon = null;
+            _newBag[_selectedIndex].OnPerformedAction = null;
+            _newBag[_selectedIndex].OnStartedAction = null;
         }
     }
 }
