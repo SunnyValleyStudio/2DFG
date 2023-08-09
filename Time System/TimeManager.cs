@@ -83,13 +83,13 @@ namespace FarmGame.TimeSystem
             {
                 _passedTime = _passedTime - REAL_TO_GAME_TIME_CONVERSION;
                 _currentTime = _currentTime.Add(new TimeSpan(0, 10, 0));
-                SendTimeUpdateEvent();
                 if(_currentTime.Hours == 0 && _currentTime.Minutes == 0)
                 {
                     int oldSeasonIndex = _calendar.Season;
                     _calendar.ProgressTime();
                     SendDayUpdateEvent(oldSeasonIndex != _calendar.Season);
                 }
+                SendTimeUpdateEvent();
             }
         }
     }
