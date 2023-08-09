@@ -1,6 +1,7 @@
 using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
 using FarmGame.Input;
+using FarmGame.TimeSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace FarmGame.UI
         private ItemSelectionUI _itemSelection;
         [SerializeField]
         private ItemDescriptionUI _itemDescription;
+        [SerializeField]
+        private PauseTimeControllerSO _pauseTimeController;
 
         private void Awake()
         {
@@ -49,6 +52,7 @@ namespace FarmGame.UI
             _itemSelection.EnableController(_input);
 
             UpdateInventoryItems(inventory.InventoryContent);
+            _pauseTimeController.SetTimePause(true);
         }
 
         private void UpdateInventoryItems(IEnumerable<InventoryItemData> inventoryContent)
@@ -80,6 +84,7 @@ namespace FarmGame.UI
 
         private void ExitInventory()
         {
+            _pauseTimeController.SetTimePause(false);
             _input.EnableDefaultActionMap();
             _input.OnUIExit -= ExitInventory;
             _input.OnUIToggleInventory -= ExitInventory;
