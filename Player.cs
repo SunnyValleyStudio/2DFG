@@ -46,6 +46,8 @@ namespace FarmGame.Agent
             {
                 _blocked = value;
                 _agentMover.Stopped = _blocked;
+                if (_blocked)
+                    _agentAnimation.PlayMovementAnimation(false);
                 _agentInput.BlockInput(_blocked);
             }
         }

@@ -50,8 +50,8 @@ namespace FarmGame.Tools
                     agent.AgentAnimation.OnAnimationEnd.AddListener(
                         () =>
                         {
-                            item.Interact(agent);
                             agent.Blocked = false;
+                            item.Interact(agent);
                             Debug.Log("Agent Restarted");
                         }
                         );
