@@ -154,17 +154,50 @@ namespace FarmGame.Farming
 
         private void UpdateCropAt(Vector3Int position, int iD, int growthLevel)
         {
-            throw new NotImplementedException();
+            if (_fieldRenderer == null)
+                return;
+            Vector3Int tilePosition = _fieldRenderer.GetTilemapTilePosition(position);
+            CropData data = _cropDatabase.GetDataForID(iD);
+            if(data == null)
+            {
+                Debug.LogError($"No data for crop with id {iD}", gameObject);
+                return;
+            }
+            else
+            {
+                _fieldRenderer.UpdateCropVisualization(tilePosition, data.Sprites[growthLevel]
+                    , growthLevel > 0);
+                if (growthLevel < 0)
+                    _audioSource.PlayOneShot(_placeSeedSound);
+            }
         }
 
         private void RemoveCropAt(Vector3Int position)
         {
-            throw new NotImplementedException();
+            _fieldData.crops.Remove(position);
+            if(_fieldRenderer == null)
+            {
+                _fieldRenderer.RemoveCropAt(position);
+            }
         }
 
         private void ClearFieldAt(Vector3Int position)
         {
-            throw new NotImplementedException();
+            _fieldData.preparedFields.Remove(position);
+            RecreatePreparedFieldPositions();
+        }
+
+        private void RecreatePreparedFieldPositions()
+        {
+            if (_fieldRenderer == null)
+                return;
+            _fieldRenderer.ClearPreparedFields();
+            foreach (var fieldPosition in _fieldData.preparedFields)
+            {
+                bool watered = _fieldData.crops.ContainsKey(fieldPosition) ?
+                    _fieldData.crops[fieldPosition].Watered : false;
+                _fieldRenderer.PrepareFieldAt(fieldPosition, watered);
+            }
         }
 
         public void PrepareFieldAt(Vector2 worldPosition)

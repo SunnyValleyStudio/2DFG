@@ -14,7 +14,7 @@ namespace FarmGame.Farming
         private Tilemap _preparedFieldTilemap;
 
         [SerializeField]
-        private TileBase _preparedFieldTile;
+        private TileBase _preparedFieldTile, _wateredFieldTile;
 
         Dictionary<Vector3Int, GameObject> _cropVisualRepresentation = new();
         [SerializeField]
@@ -23,9 +23,10 @@ namespace FarmGame.Farming
         public Vector3Int GetTilemapTilePosition(Vector3 worldPosition)
             => _preparedFieldTilemap.WorldToCell(worldPosition);
 
-        public void PrepareFieldAt(Vector3Int fieldCellPosition)
+        public void PrepareFieldAt(Vector3Int fieldCellPosition, bool watered = false)
         {
-            _preparedFieldTilemap.SetTile(fieldCellPosition,_preparedFieldTile);
+            TileBase tile = watered ? _wateredFieldTile : _preparedFieldTile;
+            _preparedFieldTilemap.SetTile(fieldCellPosition, tile);
         }
 
         public void CreateCropVisualization(Vector3Int tilePosition, Sprite cropSprite, 
@@ -65,9 +66,34 @@ namespace FarmGame.Farming
             }
         }
 
-        internal PickUpInteraction MakeCropCollectable(Vector3Int position, CropData cropData, int v, ItemDatabaseSO itemDatabase)
+        public PickUpInteraction MakeCropCollectable(Vector3Int position, CropData cropData, 
+            int quality, ItemDatabaseSO itemDatabase)
         {
-            throw new NotImplementedException();
+            GameObject cropObject = _cropVisualRepresentation[position];
+
+            ItemData itemData = cropObject.AddComponent<ItemData>();
+            itemData.itemDatabaseIndex = cropData.ProducedItemID;
+            itemData.itemCount = cropData.ProducedCount;
+            itemData.itemQuality = quality;
+
+            PickUpInteraction interaction = cropObject.AddComponent<PickUpInteraction>();
+            interaction.ItemDatabase = itemDatabase;
+            interaction.UsableTools = cropData.GetCollectTools;
+            interaction.OnPickUp = new();
+
+            return interaction;
+        }
+
+        public void ClearPreparedFields()
+        {
+            _preparedFieldTilemap.ClearAllTiles();
+        }
+
+        public void RemoveCropAt(Vector3Int position)
+        {
+            if(_cropVisualRepresentation.ContainsKey(position)) 
+                Destroy(_cropVisualRepresentation[position]);
+            _cropVisualRepresentation.Remove(position);
         }
     }
 } 
