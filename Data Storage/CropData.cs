@@ -16,7 +16,7 @@ namespace FarmGame.DataStorage
         [Min(0)]
         public int ProducedItemID;
         public List<Sprite> Sprites;
-        [Min(1)]
+        [Min(0)]
         public int GrowthDelayPerStage;
         [Min(1)]
         public int WiltThreshold;

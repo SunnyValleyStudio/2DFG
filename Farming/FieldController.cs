@@ -105,6 +105,7 @@ namespace FarmGame.Farming
             }
             else
             {
+                crop.Watered = true;
                 if (crop.Watered)
                 {
                     crop.Watered = false;

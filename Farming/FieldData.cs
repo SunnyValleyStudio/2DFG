@@ -36,11 +36,11 @@ namespace FarmGame.Farming
         {
             this.ID = ID;
         }
-
+         
         public override string ToString()
         {
-            return $"id {this.ID}, Ready {this.Ready}, Dead {this.Dead}, Progree {this.Progress}" +
-                $"Watered {this.Watered}";
+            return $"id {this.ID}, Ready {this.Ready}, Dead {this.Dead}, Level {this.GrowthLevel}" +
+                $",Regress {this.Regress}, Progree {this.Progress}, Watered {this.Watered}";
         }
 
         public int GetQuality()
