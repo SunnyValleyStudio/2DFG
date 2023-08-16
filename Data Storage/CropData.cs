@@ -22,6 +22,7 @@ namespace FarmGame.DataStorage
         public int WiltThreshold;
         [SerializeField]
         private Seasons _growthSeason;
+        [field: SerializeField]
         public int GrowthSeasonIndex { get; private set; }
         [field:SerializeField]
         public int ProducedCount { get; private set; }
@@ -43,11 +44,12 @@ namespace FarmGame.DataStorage
 
 namespace FarmGame
 {
+    [Flags]
     public enum Seasons
     {
-        Spring,
-        Summer,
-        Autumn,
-        Winter
+        Spring = 1, //0001
+        Summer = 2, //0010 
+        Autumn = 4, //0100
+        Winter = 8  //1000
     }
 }

@@ -1,3 +1,5 @@
+using FarmGame.DataStorage;
+using FarmGame.Interactions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,6 +46,28 @@ namespace FarmGame.Farming
             {
                 renderer.ChangeLayerOrder();
             }
+        }
+
+        public void WiltCropVisualization(Vector3Int position)
+        {
+            if (_cropVisualRepresentation[position] != null)
+            {
+                _cropVisualRepresentation[position].GetComponent<CropRenderer>().WiltCrop();
+                if (_cropVisualRepresentation[position]
+                    .TryGetComponent(out PickUpInteraction interaction))
+                {
+                    Destroy(interaction);
+                }
+            }
+            else
+            {
+                Debug.LogError($"There is no CROP at position {position}", gameObject);
+            }
+        }
+
+        internal PickUpInteraction MakeCropCollectable(Vector3Int position, CropData cropData, int v, ItemDatabaseSO itemDatabase)
+        {
+            throw new NotImplementedException();
         }
     }
 } 
