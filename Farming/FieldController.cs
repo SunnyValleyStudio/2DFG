@@ -176,7 +176,7 @@ namespace FarmGame.Farming
         private void RemoveCropAt(Vector3Int position)
         {
             _fieldData.crops.Remove(position);
-            if(_fieldRenderer == null)
+            if(_fieldRenderer != null)
             {
                 _fieldRenderer.RemoveCropAt(position);
             }
