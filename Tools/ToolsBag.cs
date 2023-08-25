@@ -141,7 +141,7 @@ namespace FarmGame.Tools
         private void EquipTool(IAgent agent)
         {
             _newBag[_selectedIndex].Equip(agent);
-            _newBag[_selectedIndex].OnFinishedActon += UpdateInventoryData;
+            _newBag[_selectedIndex].OnFinishedAction += UpdateInventoryData;
         }
 
         private void UpdateInventoryData(IAgent agent)
@@ -188,7 +188,7 @@ namespace FarmGame.Tools
         private void PutAway(IAgent agent)
         {
             _newBag[_selectedIndex].PutAway(agent);
-            _newBag[_selectedIndex].OnFinishedActon = null;
+            _newBag[_selectedIndex].OnFinishedAction = null;
             _newBag[_selectedIndex].OnPerformedAction = null;
             _newBag[_selectedIndex].OnStartedAction = null;
         }

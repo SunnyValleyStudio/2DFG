@@ -14,6 +14,7 @@ namespace FarmGame.Tools
                 ToolType.Hand => new HandTool(description.ID,data),
                 ToolType.Hoe => new HoeTool(description.ID, data),
                 ToolType.SeedPlacer => new SeedPlacementTool(description.ID, data),
+                ToolType.WatringCan => new WateringCanTool(description.ID, data),
                 _ => throw new System.NotImplementedException(
                     $"ToolType is not defined in the ToolFactory {description.ToolType}")
             };

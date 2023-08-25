@@ -105,7 +105,7 @@ namespace FarmGame.Farming
             }
             else
             {
-                crop.Watered = true;
+                //crop.Watered = true;
                 if (crop.Watered)
                 {
                     crop.Watered = false;
@@ -251,6 +251,26 @@ namespace FarmGame.Farming
         public void PrintCropsStatus()
         {
             _fieldData.PrintCropStatus();
+        }
+
+        public bool IsThereCropAt(Vector2 pos)
+        => _fieldData.crops.ContainsKey(_fieldRenderer.GetTilemapTilePosition(pos));
+
+        public void WaterCropAt(Vector2 pos)
+        {
+            Vector3Int tilePosition = _fieldRenderer.GetTilemapTilePosition(pos);
+            bool result = WaterCropUpdateData(tilePosition);
+            if (result == false)
+                return;
+            _fieldRenderer.WaterCropAt(tilePosition);
+        }
+
+        private bool WaterCropUpdateData(Vector3Int tilePosition)
+        {
+            if(_fieldData.crops.ContainsKey(tilePosition) == false)
+                return false;
+            _fieldData.crops[tilePosition].Watered = true;
+            return true;
         }
     }
 }

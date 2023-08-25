@@ -95,5 +95,10 @@ namespace FarmGame.Farming
                 Destroy(_cropVisualRepresentation[position]);
             _cropVisualRepresentation.Remove(position);
         }
+
+        public void WaterCropAt(Vector3Int tilePosition)
+        {
+            _preparedFieldTilemap.SetTile(tilePosition, _wateredFieldTile);
+        }
     }
 } 

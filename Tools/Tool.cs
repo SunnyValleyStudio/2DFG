@@ -10,7 +10,7 @@ namespace FarmGame.Tools
     {
         public ToolType ToolType { get; protected set; }
         public Action OnPerformedAction, OnStartedAction;
-        public Action<IAgent> OnFinishedActon;
+        public Action<IAgent> OnFinishedAction;
 
         public RuntimeAnimatorController ToolAnimator { get; set; }
         public Vector2Int ToolRange { get; set; } = Vector2Int.one;

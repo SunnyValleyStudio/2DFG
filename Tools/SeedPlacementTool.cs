@@ -70,7 +70,7 @@ namespace FarmGame.Tools
                     }
                 }
                 _quantity--;
-                OnFinishedActon?.Invoke(agent);
+                OnFinishedAction?.Invoke(agent);
                 agent.Blocked = false;
             });
             agent.FieldController.PrintCropsStatus();

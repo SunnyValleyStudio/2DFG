@@ -3,6 +3,7 @@ using FarmGame.Interactions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -65,7 +66,7 @@ namespace FarmGame.Tools
                 agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
                 {
                     agent.Blocked = false;
-                    OnFinishedActon?.Invoke(agent);
+                    OnFinishedAction?.Invoke(agent);
                 });
 
                 agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
@@ -73,9 +74,70 @@ namespace FarmGame.Tools
             }
         }
 
+        //private void TryInteractionWithSomething(IAgent agent)
+        //{
+        //    foreach (var interactable in agent.InteractionDetector.PerformDetection())
+        //    {
+        //        if (interactable.CanInteract(agent))
+        //        {
+        //            agent.Blocked = true;
+        //            agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
+        //            if (ToolAnimator != null)
+        //            {
+        //                agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
+        //                agent.AgentAnimation.ToolAnimation.PlayAnimation();
+        //            }
+        //            agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
+        //            {
+        //                interactable.Interact(agent);
+        //            });
+        //            agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
+        //            {
+        //                agent.Blocked = false;
+        //                OnFinishedAction?.Invoke(agent);
+        //            }
+        //            );
+        //            return;
+        //        }
+        //    }
+
+        //}
+
         private void TryWateringCrop(IAgent agent)
         {
-            throw new NotImplementedException();
+            List<Vector2> cropFields = agent.FieldDetectorObject.ValidSelectionPositions
+                .Where(pos => !agent.FieldController.IsThereCropAt(pos)).ToList();
+            if(cropFields.Count <= 0)
+            {
+                Debug.Log("No crops to water here");
+                return;
+            }
+            if(NumberOfUses <= 0)
+            {
+                Debug.Log("Watering can has NO water)");
+            }
+            agent.Blocked = true;
+            agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
+            if (ToolAnimator != null)
+            {
+                agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
+                {
+                    foreach (var pos in cropFields)
+                    {
+                        agent.FieldController.WaterCropAt(pos);
+                    }
+                    NumberOfUses--;
+                });
+                agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
+                {
+                    agent.Blocked = false;
+                    OnFinishedAction?.Invoke(agent);
+                    agent.FieldController.PrintCropsStatus();
+                });
+
+                agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
+                agent.AgentAnimation.ToolAnimation.PlayAnimation();
+            }
         }
     }
 }
