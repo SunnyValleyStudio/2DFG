@@ -168,7 +168,7 @@ namespace FarmGame.Farming
             {
                 _fieldRenderer.UpdateCropVisualization(tilePosition, data.Sprites[growthLevel]
                     , growthLevel > 0);
-                if (growthLevel < 0)
+                if (growthLevel < 1)
                     _audioSource.PlayOneShot(_placeSeedSound);
             }
         }

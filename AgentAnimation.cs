@@ -14,7 +14,8 @@ namespace FarmGame.Agent
         private string directionX = "DirectionX", 
             directionY = "DirectionY", 
             movingBoolFlag = "Movement",
-            pickup = "Pickup", swing = "Swing";
+            pickup = "Pickup", swing = "Swing",
+            watering = "Watering";
 
         [SerializeField]
         private ToolAnimation toolAnimation;
@@ -65,6 +66,10 @@ namespace FarmGame.Agent
             {
                 _animator.SetTrigger(swing);
             }
+            else if (animationType == AnimationType.Watering)
+            {
+                _animator.SetTrigger(watering);
+            }
         }
     }
 
@@ -72,6 +77,7 @@ namespace FarmGame.Agent
     {
         None,
         PickUp,
-        Swing
+        Swing,
+        Watering
     }
 }
