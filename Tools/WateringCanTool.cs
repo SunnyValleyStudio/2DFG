@@ -44,69 +44,69 @@ namespace FarmGame.Tools
             }
         }
 
-        private void TryInteractionWithSomething(IAgent agent)
-        {
-            agent.Blocked = true;
-            agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
-            if(ToolAnimator != null)
-            {
-                agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
-                {
-                    foreach (IInteractable interactable 
-                    in agent.InteractionDetector.PerformDetection())
-                    {
-                        if (interactable.CanInteract(agent))
-                        {
-                            interactable.Interact(agent);
-                            agent.Blocked = true;
-                            return;
-                        }
-                    }
-                });
-                agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
-                {
-                    agent.Blocked = false;
-                    OnFinishedAction?.Invoke(agent);
-                });
-
-                agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
-                agent.AgentAnimation.ToolAnimation.PlayAnimation();
-            }
-        }
-
         //private void TryInteractionWithSomething(IAgent agent)
         //{
-        //    foreach (var interactable in agent.InteractionDetector.PerformDetection())
+        //    agent.Blocked = true;
+        //    agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
+        //    if(ToolAnimator != null)
         //    {
-        //        if (interactable.CanInteract(agent))
+        //        agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
         //        {
-        //            agent.Blocked = true;
-        //            agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
-        //            if (ToolAnimator != null)
+        //            foreach (IInteractable interactable 
+        //            in agent.InteractionDetector.PerformDetection())
         //            {
-        //                agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
-        //                agent.AgentAnimation.ToolAnimation.PlayAnimation();
+        //                if (interactable.CanInteract(agent))
+        //                {
+        //                    interactable.Interact(agent);
+        //                    agent.Blocked = true;
+        //                    return;
+        //                }
         //            }
-        //            agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
-        //            {
-        //                interactable.Interact(agent);
-        //            });
-        //            agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
-        //            {
-        //                agent.Blocked = false;
-        //                OnFinishedAction?.Invoke(agent);
-        //            }
-        //            );
-        //            return;
-        //        }
-        //    }
+        //        });
+        //        agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
+        //        {
+        //            agent.Blocked = false;
+        //            OnFinishedAction?.Invoke(agent);
+        //        });
 
+        //        agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
+        //        agent.AgentAnimation.ToolAnimation.PlayAnimation();
+        //    }
         //}
+
+        private void TryInteractionWithSomething(IAgent agent)
+        {
+            foreach (var interactable in agent.InteractionDetector.PerformDetection())
+            {
+                if (interactable.CanInteract(agent))
+                {
+                    agent.Blocked = true;
+                    agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
+                    if (ToolAnimator != null)
+                    {
+                        agent.AgentAnimation.ToolAnimation.SetAnimatorController(ToolAnimator);
+                        agent.AgentAnimation.ToolAnimation.PlayAnimation();
+                    }
+                    agent.AgentAnimation.OnAnimationOnce.AddListener(() =>
+                    {
+                        interactable.Interact(agent);
+                    });
+                    agent.AgentAnimation.OnAnimationEnd.AddListener(() =>
+                    {
+                        agent.Blocked = false;
+                        OnFinishedAction?.Invoke(agent);
+                    }
+                    );
+                    return;
+                }
+            }
+
+        }
 
         private void TryWateringCrop(IAgent agent)
         {
             List<Vector2> cropFields = agent.FieldDetectorObject.ValidSelectionPositions
-                .Where(pos => !agent.FieldController.IsThereCropAt(pos)).ToList();
+                .Where(pos => agent.FieldController.IsThereCropAt(pos)).ToList();
             if(cropFields.Count <= 0)
             {
                 Debug.Log("No crops to water here");
