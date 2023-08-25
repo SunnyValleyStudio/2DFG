@@ -21,7 +21,7 @@ namespace FarmGame.Agent
         private ToolAnimation toolAnimation;
 
         [HideInInspector]
-        public UnityEvent OnAnimationEnd;
+        public UnityEvent OnAnimationEnd, OnAnimationOnce;
         public UnityEvent OnFootStep;
 
         public ToolAnimation ToolAnimation { get => toolAnimation;}
@@ -35,6 +35,11 @@ namespace FarmGame.Agent
         {
             OnAnimationEnd?.Invoke();
             OnAnimationEnd.RemoveAllListeners();
+        }
+        public void PlayerActionAnimationOnce()
+        {
+            OnAnimationOnce?.Invoke();
+            OnAnimationOnce.RemoveAllListeners();
         }
 
         public void PlayFootstep() 

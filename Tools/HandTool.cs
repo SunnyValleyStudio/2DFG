@@ -67,6 +67,7 @@ namespace FarmGame.Tools
         None,
         Hand,
         Hoe,
-        SeedPlacer
+        SeedPlacer,
+        WatringCan
     }
 }
