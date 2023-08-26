@@ -22,7 +22,7 @@ namespace FarmGame.Farming
         [SerializeField]
         private AudioSource _audioSource;
         [SerializeField]
-        private AudioClip _preparedFieldSound, _placeSeedSound;
+        private AudioClip _preparedFieldSound, _placeSeedSound, _wateringFieldSound;
 
         private TimeManager _timeManager;
 
@@ -263,6 +263,7 @@ namespace FarmGame.Farming
             if (result == false)
                 return;
             _fieldRenderer.WaterCropAt(tilePosition);
+            _audioSource.PlayOneShot(_wateringFieldSound);
         }
 
         private bool WaterCropUpdateData(Vector3Int tilePosition)

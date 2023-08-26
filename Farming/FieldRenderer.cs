@@ -3,6 +3,7 @@ using FarmGame.Interactions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,6 +20,9 @@ namespace FarmGame.Farming
         Dictionary<Vector3Int, GameObject> _cropVisualRepresentation = new();
         [SerializeField]
         private GameObject _cropPrefab;
+
+        [SerializeField]
+        private List<ParticleSystem> _wateringEffects;
 
         public Vector3Int GetTilemapTilePosition(Vector3 worldPosition)
             => _preparedFieldTilemap.WorldToCell(worldPosition);
@@ -98,7 +102,31 @@ namespace FarmGame.Farming
 
         public void WaterCropAt(Vector3Int tilePosition)
         {
+            PlayWaterSplashEffect(tilePosition);
             _preparedFieldTilemap.SetTile(tilePosition, _wateredFieldTile);
+        }
+
+        private void PlayWaterSplashEffect(Vector3Int tilePosition)
+        {
+            if(_wateringEffects.Count > 0 && _wateringEffects.All(effect =>
+            effect.gameObject.activeSelf))
+            {
+                ParticleSystem particleSystem = Instantiate(_wateringEffects[0]
+                    , transform);
+                _wateringEffects.Add(particleSystem);
+                particleSystem.gameObject.SetActive(false);
+            }
+            foreach(var waterEffect in _wateringEffects) 
+            { 
+                if(waterEffect.gameObject.activeSelf == false)
+                {
+                    waterEffect.transform.position = tilePosition 
+                        + new Vector3(0.5f, 0.5f);
+                    waterEffect.gameObject.SetActive(true);
+                    waterEffect.Play();
+                    return;
+                }
+            }
         }
     }
 } 

@@ -115,6 +115,7 @@ namespace FarmGame.Tools
             if(NumberOfUses <= 0)
             {
                 Debug.Log("Watering can has NO water)");
+                return;
             }
             agent.Blocked = true;
             agent.AgentAnimation.PlayAnimation(AnimationType.Watering);
