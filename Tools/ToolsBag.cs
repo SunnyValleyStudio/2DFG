@@ -196,5 +196,14 @@ namespace FarmGame.Tools
             _newBag[_selectedIndex].OnPerformedAction = null;
             _newBag[_selectedIndex].OnStartedAction = null;
         }
+
+        public void RestoreCurrentTool(IAgent agent)
+        {
+            if(CurrentTool.ToolType == ToolType.WatringCan)
+            {
+                ((WateringCanTool)CurrentTool).Refill();
+            }
+            UpdateInventoryData(agent);
+        }
     }
 }

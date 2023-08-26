@@ -16,7 +16,7 @@ namespace FarmGame.Tools
         public WateringCanTool(int itemID, string data) : base(itemID, data)
         {
             this.ToolType = ToolType.WatringCan;
-            NumberOfUses = _maxUses;
+            //NumberOfUses = _maxUses;
         }
 
         public override bool IsToolStillValid()
@@ -147,6 +147,11 @@ namespace FarmGame.Tools
         public override void RestoreSavedData(string data)
         {
             NumberOfUses = string.IsNullOrEmpty(data) ? 0 : int.Parse(data);
+        }
+
+        internal void Refill()
+        {
+            NumberOfUses = _maxUses;
         }
     }
 }
