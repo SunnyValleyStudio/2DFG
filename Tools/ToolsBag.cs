@@ -126,6 +126,10 @@ namespace FarmGame.Tools
             {
                 count = _toolsBagInventory.GetItemDataAt(_selectedIndex - 1).count;
             }
+            else if(selectedToolDescription.ToolType == ToolType.WatringCan)
+            {
+                count = ((WateringCanTool)CurrentTool).NumberOfUses;
+            }
             List<Sprite> sprites = new List<Sprite>();
             foreach (Tool tool in _newBag)
             {

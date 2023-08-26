@@ -140,5 +140,13 @@ namespace FarmGame.Tools
                 agent.AgentAnimation.ToolAnimation.PlayAnimation();
             }
         }
+        public override string GetDataToSave()
+        {
+            return NumberOfUses.ToString();
+        }
+        public override void RestoreSavedData(string data)
+        {
+            NumberOfUses = string.IsNullOrEmpty(data) ? 0 : int.Parse(data);
+        }
     }
 }
