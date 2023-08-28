@@ -12,6 +12,9 @@ namespace FarmGame
         private string directionX = "DirectionX",
             directionY = "DirectionY", useTrigger = "Use";
 
+        [SerializeField, Min(0.01f)]
+        private float _defaultAnimationSpeed = 1;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -35,8 +38,10 @@ namespace FarmGame
             _animator.SetFloat(directionY, directionInt.y);
         }
 
-        public void PlayAnimation()
+        public void PlayAnimation(float animationSpeed = -1)
         {
+            _animator.speed = animationSpeed <= 0 ? _defaultAnimationSpeed 
+                : animationSpeed;
             _animator.SetTrigger(useTrigger);
         }
     }
