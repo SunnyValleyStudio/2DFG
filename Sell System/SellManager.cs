@@ -69,7 +69,7 @@ namespace FarmGame.SellSystem
 
         private void TrySellingItems(object sender, TimeEventArgs e)
         {
-            if(e.CurrentTime.Hours == _sellHour)
+            if(e.CurrentTime.Hours == _sellHour && e.CurrentTime.Minutes == 0)
             {
                 PerformSelling();
             }
