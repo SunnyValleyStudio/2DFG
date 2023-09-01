@@ -39,6 +39,9 @@ namespace FarmGame.SellSystem
 
         private Inventory _currentlySelectedInventory;
 
+        [SerializeField]
+        private ItemInteractUI _playerItemInteractor, _sellBoxItemInteractor;
+
         internal void PrepareSellBox(Inventory inventory)
         {
             _input.EnableUIActionMap();
@@ -51,7 +54,33 @@ namespace FarmGame.SellSystem
             _currentlySelectedInventory = _playerInventory;
             _playerItemSelection.EnableController(_input);
 
+            _playerItemInteractor.EnableController(_input);
+
             _pauseTimeControllerSO.SetTimePause(true);
+        }
+
+        public void TransferItem(ItemSelectionUI selectedWindow)
+        {
+            Inventory receivingInventory = selectedWindow == _playerItemSelection
+                ? _sellBoxInventory : _playerInventory;
+            if(_currentlySelectedInventory.GetItemDataAt(selectedWindow.SelectedItem) 
+                == null)
+            {
+                return;
+            }
+
+            InventoryItemData item 
+                = _currentlySelectedInventory.GetItemDataAt(selectedWindow.SelectedItem);
+            ItemDescription itemDescription = _itemDatabase.GetItemData(item.id);
+
+            if (itemDescription != null 
+                && receivingInventory.IsThereSpace(item,itemDescription.StackQuantity))
+            {
+                receivingInventory.AddItem(item, itemDescription.StackQuantity);
+                _currentlySelectedInventory.RemoveAllItemAt(selectedWindow.SelectedItem);
+            }
+
+            UpdateDescription(selectedWindow.SelectedItem);
         }
 
         private void PrepareSellBoxInventory()
@@ -86,10 +115,14 @@ namespace FarmGame.SellSystem
             _playerItemSelection.DisableController(_input);
             _sellBoxItemSelection.DisableController(_input);
 
+            _playerItemInteractor.DisableController(_input);
+            _sellBoxItemInteractor.DisableController(_input);
+
             selectedWindow.EnableController(_input);
 
             if(selectedWindow == _sellBoxItemSelection)
             {
+                _sellBoxItemInteractor.EnableController(_input);
                 _currentlySelectedInventory = _sellBoxInventory;
                 int itemIndexToSelect
                     = _playerItemSelection.SelectedItem
@@ -101,6 +134,7 @@ namespace FarmGame.SellSystem
             }
             else
             {
+                _playerItemInteractor.EnableController(_input);
                 _currentlySelectedInventory = _playerInventory;
                 int itemIndexToSelect = _sellBoxItemSelection.SelectedItem
                     + (_sellBoxInventoryRenderer.RowSize - 1);
@@ -153,6 +187,8 @@ namespace FarmGame.SellSystem
         {
             _playerItemSelection.DisableController(_input);
             _sellBoxItemSelection.DisableController(_input);
+            _playerItemInteractor.DisableController(_input);
+            _sellBoxItemInteractor.DisableController(_input);
 
             _sellBoxCanvas.SetActive(false);
             _pauseTimeControllerSO.SetTimePause(false);
