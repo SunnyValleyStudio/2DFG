@@ -18,5 +18,7 @@ namespace FarmGame.Agent
         FieldController FieldController { get; }
 
         public Inventory Inventory { get; }
+        AgentDataSO AgentData { get; }
     }
+
 }

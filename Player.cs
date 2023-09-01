@@ -88,6 +88,9 @@ namespace FarmGame.Agent
         [field:SerializeField]
         public ToolsBag ToolsBag { get; private set; }
 
+        [field: SerializeField]
+        public AgentDataSO AgentData { get; private set; }
+
         public FieldController FieldController => _fieldController;
 
         public UnityEvent<Inventory> OnToggleInventory;
@@ -116,6 +119,8 @@ namespace FarmGame.Agent
         private void Start()
         {
             ToolsBag.Initialize(this);
+            Debug.Log("<color=red>Resetting Agent Data</color>");
+            AgentData.Money = 0;
         }
 
         private void SwapTool()
