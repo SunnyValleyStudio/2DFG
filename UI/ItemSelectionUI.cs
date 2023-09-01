@@ -51,7 +51,7 @@ namespace FarmGame.UI
             if(newIndex > -1 && newIndex < _inventoryRenderer.InventoryItemCount 
                 && (newRow == currentRow || newColumn == currentColumn))
             {
-                SeletItemAt(newIndex);
+                SelectItemAt(newIndex);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace FarmGame.UI
             }
         }
 
-        private void SeletItemAt(int newIndex)
+        public void SelectItemAt(int newIndex)
         {
             _inventoryRenderer.ResetAllSelection(false);
             _selectedItemIndex = newIndex;
