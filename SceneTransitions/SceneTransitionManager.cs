@@ -3,25 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FarmGame
+namespace FarmGame.SceneTransitions
 {
     public class SceneTransitionManager : MonoBehaviour
     {
-        internal void LoadScene(string sceneReferenceName)
+        public event Action OnBeforeLoadScene;
+        public void LoadScene(string sceneReferenceName)
         {
-            throw new NotImplementedException();
+            OnBeforeLoadScene?.Invoke();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneReferenceName);
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
     }
 }
