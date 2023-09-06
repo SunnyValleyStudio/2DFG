@@ -29,7 +29,7 @@ namespace FarmGame.Tools
         public Tool CurrentTool => _newBag[_selectedIndex];
         public event Action<int, List<Sprite>, int?> OnToolsBagUpdated;
 
-        private void Start()
+        private void Awake()
         {
             for (int i = 0; i < _initialTools.Count; i++)
             {
