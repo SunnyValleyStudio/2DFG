@@ -121,6 +121,7 @@ namespace FarmGame.Agent
             ToolsBag.Initialize(this);
             Debug.Log("<color=red>Resetting Agent Data</color>");
             AgentData.Money = 0;
+            _agentAnimation.ChangeDirection(Vector2.down);
         }
 
         private void SwapTool()

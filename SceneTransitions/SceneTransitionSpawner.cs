@@ -54,7 +54,7 @@ namespace FarmGame.SceneTransitions
                 return;
             }
             SaveData dataToLoad = JsonUtility.FromJson<SaveData>(data);
-            if(dataToLoad.TransitionID > 0)
+            if(dataToLoad.TransitionID >= 0)
             {
                 foreach (var item in _transitionTriggers)
                 {
