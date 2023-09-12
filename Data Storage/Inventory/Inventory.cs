@@ -187,6 +187,66 @@ namespace FarmGame.DataStorage.Inventory
                 _inventoryContent[i] = null;
             }
         }
+
+        internal string GetDataToSave()
+        {
+            InventorySaveData data = new()
+            {
+                idList = new(),
+                countList = new(),
+                qualityList = new(),
+                dataList = new(),
+            };
+
+            foreach (var item in InventoryContent)
+            {
+                if(item == null)
+                {
+                    data.idList.Add(-1);
+                    data.countList.Add(-1);
+                    data.qualityList.Add(-1);
+                    data.dataList.Add(null);
+                }
+                else
+                {
+                    data.idList.Add(item.id);
+                    data.countList.Add(item.count);
+                    data.qualityList.Add(item.quality);
+                    data.dataList.Add(item.data);
+                }
+            }
+
+            return JsonUtility.ToJson(data);
+        }
+
+        internal void RestoreSavedData(string inventoryData)
+        {
+            if(string.IsNullOrEmpty(inventoryData))
+                return;
+            InventorySaveData data 
+                = JsonUtility.FromJson<InventorySaveData>(inventoryData);
+            for (int i = 0; i < data.idList.Count; i++)
+            {
+                if (i >= Capacity)
+                    return;
+                if (data.idList[i] == -1 || data.countList[i] == -1)
+                    _inventoryContent[i] = null;
+                else
+                    _inventoryContent[i] = new InventoryItemData(
+                        data.idList[i],
+                        data.countList[i],
+                        data.qualityList[i],
+                        data.dataList[i]);
+            }
+            OnUpdateInventory?.Invoke(_inventoryContent);
+        }
+
+        [Serializable]
+        public struct InventorySaveData
+        {
+            public List<int> idList, countList, qualityList;
+            public List<string> dataList;
+        }
     }
 
     public record InventoryItemData(int id, int count, int quality, string data = null);

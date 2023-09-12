@@ -3,6 +3,7 @@ using FarmGame.DataStorage.Inventory;
 using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
+using FarmGame.SaveSystem;
 using FarmGame.Tools;
 using FarmGame.UI;
 using System;
@@ -13,7 +14,7 @@ using UnityEngine.Events;
 
 namespace FarmGame.Agent
 {
-    public class Player : MonoBehaviour, IAgent
+    public class Player : MonoBehaviour, IAgent, ISavable
     {
         [SerializeField]
         private AgentMover _agentMover;
@@ -93,6 +94,8 @@ namespace FarmGame.Agent
 
         public FieldController FieldController => _fieldController;
 
+        public int SaveID => SaveIDRepositor.PLAYER_DATA_ID;
+
         public UnityEvent<Inventory> OnToggleInventory;
 
         private void OnEnable()
@@ -150,6 +153,24 @@ namespace FarmGame.Agent
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
 
             ToolsBag.OnToolsBagUpdated -= _toolSelectionUI.UpdateUI;
+        }
+
+        public string GetData()
+        {
+            return AgentData.GetData();
+        }
+
+        public void RestoreData(string data)
+        {
+            AgentData.Inventory = Inventory;
+            if(String.IsNullOrEmpty(data))
+            {
+                AgentData.SetDefaultData();
+            }
+            else
+            {
+                AgentData.RestoreData(data);
+            }
         }
     }
 }
