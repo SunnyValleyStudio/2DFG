@@ -1,6 +1,7 @@
 using FarmGame.Agent;
 using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
+using FarmGame.SaveSystem;
 using FarmGame.TimeSystem;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ using UnityEngine;
 namespace FarmGame.SellSystem
 {
     [RequireComponent(typeof(Inventory))]
-    public class SellManager : MonoBehaviour
+    public class SellManager : MonoBehaviour, ISavable
     {
         [SerializeField, Range(0, 23)]
         private int _sellHour = 12;
@@ -25,6 +26,8 @@ namespace FarmGame.SellSystem
         private TimeManager _timeManager;
 
         private Inventory _sellBoxInventory;
+
+        public int SaveID => SaveIDRepositor.SELL_SYSTEM_ID;
 
         private void Awake()
         {
@@ -73,6 +76,33 @@ namespace FarmGame.SellSystem
             {
                 PerformSelling();
             }
+        }
+
+        public string GetData()
+        {
+            SellSystemSaveData data = new()
+            {
+                inventoryData = _sellBoxInventory.GetDataToSave(),
+                readyToSell = _readyToSell
+            };
+            return JsonUtility.ToJson(data);
+        }
+
+        public void RestoreData(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return;
+            SellSystemSaveData loadedData 
+                = JsonUtility.FromJson<SellSystemSaveData>(data);
+            _sellBoxInventory.RestoreSavedData(loadedData.inventoryData);
+            _readyToSell = loadedData.readyToSell;
+        }
+
+        [Serializable]
+        public struct SellSystemSaveData
+        {
+            public string inventoryData;
+            public bool readyToSell;
         }
     }
 }
