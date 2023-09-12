@@ -4,6 +4,7 @@ using FarmGame.TimeSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -47,6 +48,36 @@ namespace FarmGame.Farming
                 Debug.LogWarning("Can't find TimeManager", gameObject);
             }
             
+        }
+
+        public void AddDebrisAt(Vector3 position, GameObject debrisRepresentation)
+        {
+            Vector3Int debrisTilePosition 
+                = _fieldRenderer.GetTilemapTilePosition(position);
+            if (_fieldData.removedDebris.Contains(debrisTilePosition))
+            {
+                Debug.Log($"Destroing Debris {debrisRepresentation.name} " +
+                    $"at {debrisTilePosition}");
+                Destroy(debrisRepresentation);
+            }
+            else
+            {
+                _fieldData.debris.Add(debrisTilePosition);
+                _fieldRenderer
+                    .AddDebrisVisualization(debrisTilePosition, debrisRepresentation);
+            }
+
+        }
+
+        public void RemoveDebris(Vector3 position)
+        {
+            if (_fieldRenderer == null)
+                return;
+            Vector3Int debrisTilePosition 
+                = _fieldRenderer.GetTilemapTilePosition(position);
+            _fieldData.removedDebris.Add(debrisTilePosition);
+            _fieldData.debris.Remove(debrisTilePosition);
+            _fieldRenderer.RemoveDebriVisualization(debrisTilePosition);
         }
 
         private void AffectCrops(object sender, TimeEventArgs timeArgs)

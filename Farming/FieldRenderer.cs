@@ -18,6 +18,8 @@ namespace FarmGame.Farming
         private TileBase _preparedFieldTile, _wateredFieldTile;
 
         Dictionary<Vector3Int, GameObject> _cropVisualRepresentation = new();
+        Dictionary<Vector3Int, GameObject> _debrisVisualRepresentation = new();
+
         [SerializeField]
         private GameObject _cropPrefab;
 
@@ -127,6 +129,18 @@ namespace FarmGame.Farming
                     return;
                 }
             }
+        }
+
+        internal void AddDebrisVisualization(Vector3Int debrisTilePosition, GameObject debrisRepresentation)
+        {
+            _debrisVisualRepresentation[debrisTilePosition] = debrisRepresentation;
+        }
+
+        internal void RemoveDebriVisualization(Vector3Int debrisTilePosition)
+        {
+            if (_debrisVisualRepresentation.ContainsKey(debrisTilePosition))
+                Destroy(_debrisVisualRepresentation[debrisTilePosition]);
+            Debug.Log($"Trying to remove Debirs at {debrisTilePosition}");
         }
     }
 } 
