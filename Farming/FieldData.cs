@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,6 +47,50 @@ namespace FarmGame.Farming
         public int GetQuality()
         {
             return 1;
+        }
+
+        public string GetSaveData()
+        {
+            CropSaveData data = new()
+            {
+                Watered = Watered,
+                Progress = Progress,
+                Regress = Regress,
+                ID = ID,
+                Ready = Ready,
+                Dead = Dead,
+                GrowthLevel = GrowthLevel
+            };
+            return JsonUtility.ToJson(data);
+        }
+
+        public static Crop RestoreData(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return null;
+            CropSaveData loadedData = JsonUtility.FromJson<CropSaveData>(data);
+            Crop crop = new(loadedData.ID)
+            {
+                Watered = loadedData.Watered,
+                Progress = loadedData.Progress,
+                Regress = loadedData.Regress,
+                Ready = loadedData.Ready,
+                Dead = loadedData.Dead,
+                GrowthLevel = loadedData.GrowthLevel
+            };
+            return crop;
+        }
+
+        [Serializable]
+        public struct CropSaveData
+        {
+            public bool Watered;
+            public int Progress;
+            public int Regress;
+            public int ID;
+            public bool Ready;
+            public bool Dead;
+            public int GrowthLevel;
         }
     }
 }

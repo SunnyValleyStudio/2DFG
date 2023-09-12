@@ -142,5 +142,14 @@ namespace FarmGame.Farming
                 Destroy(_debrisVisualRepresentation[debrisTilePosition]);
             Debug.Log($"Trying to remove Debirs at {debrisTilePosition}");
         }
+
+        internal void ClearCropVisualization()
+        {
+            foreach (var item in _cropVisualRepresentation)
+            {
+                Destroy(item.Value);
+            }
+            _cropVisualRepresentation.Clear();
+        }
     }
 } 

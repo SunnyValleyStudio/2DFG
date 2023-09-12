@@ -1,16 +1,18 @@
 using FarmGame.DataStorage;
 using FarmGame.Interactions;
+using FarmGame.SaveSystem;
 using FarmGame.TimeSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Profiling;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FarmGame.Farming
 {
-    public class FieldController : MonoBehaviour
+    public class FieldController : MonoBehaviour, ISavable
     {
         private FieldRenderer _fieldRenderer;
         [SerializeField]
@@ -28,6 +30,8 @@ namespace FarmGame.Farming
         private TimeManager _timeManager;
 
         private TimeEventArgs _previousTimeData;
+
+        public int SaveID => SaveIDRepositor.FIELD_CONTROLLER_ID;
 
         private void Awake()
         {
@@ -48,6 +52,48 @@ namespace FarmGame.Farming
                 Debug.LogWarning("Can't find TimeManager", gameObject);
             }
             
+        }
+
+        private void Start()
+        {
+            if(_fieldRenderer != null)
+            {
+                RecreatePreparedFieldPositions();
+                RecreateFields();
+            }
+        }
+
+        private void RecreateFields()
+        {
+            if (_fieldRenderer == null)
+                return;
+            _fieldRenderer.ClearCropVisualization();
+            foreach (var item in _fieldData.crops)
+            {
+                CropData data = _cropDatabase.GetDataForID(item.Value.ID);
+                if(data == null)
+                {
+                    Debug.LogError($"No data for crop with ID {item.Value.ID}", gameObject);
+                    return;
+                }
+                PlaceCropAt(new Vector2(item.Key.x, item.Key.y), item.Value.ID,
+                    item.Value.GrowthLevel, false);
+                if (item.Value.Dead)
+                {
+                    WiltCrop(item.Key);
+                    return;
+                }
+                if (item.Value.Ready)
+                {
+                    PickUpInteraction interaction = _fieldRenderer.MakeCropCollectable(
+                        item.Key, data,
+                        item.Value.GetQuality(), _itemDatabase);
+                    interaction.OnPickUp.AddListener(() =>
+                    {
+                        RemoveCropAt(item.Key);
+                    });
+                }
+            }
         }
 
         public void AddDebrisAt(Vector3 position, GameObject debrisRepresentation)
@@ -303,6 +349,53 @@ namespace FarmGame.Farming
                 return false;
             _fieldData.crops[tilePosition].Watered = true;
             return true;
+        }
+
+        public string GetData()
+        {
+            FieldControllerSaveData data = new()
+            {
+                preparedFields = _fieldData.preparedFields,
+                cropFields = new List<Vector3Int>(_fieldData.crops.Keys),
+                cropData = _fieldData.crops.Values.Select(crop => crop.GetSaveData()).ToList(),
+                removedDebris = new List<Vector3Int>(_fieldData.removedDebris),
+                previousCurrentDay = _previousTimeData == null ? -1 
+                : _previousTimeData.CurrentDay
+            };
+            return JsonUtility.ToJson(data);
+        }
+
+        public void RestoreData(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return;
+            FieldControllerSaveData loadedData 
+                = JsonUtility.FromJson<FieldControllerSaveData>(data);
+            _fieldData.preparedFields = loadedData.preparedFields;
+            _fieldData.removedDebris = new HashSet<Vector3Int>(loadedData.removedDebris);
+            for (int i = 0; i < loadedData.cropFields.Count; i++)
+            {
+                Crop c = Crop.RestoreData(loadedData.cropData[i]);
+                _fieldData.crops.Add(loadedData.cropFields[i], c);
+            }
+            if (loadedData.previousCurrentDay == -1)
+                _previousTimeData = null;
+            else
+                _previousTimeData 
+                    = new TimeEventArgs(false, 
+                    loadedData.previousCurrentDay, 
+                    1, 1, new TimeSpan(), false);
+            PrintCropsStatus();
+        }
+
+        [Serializable]
+        public struct FieldControllerSaveData
+        {
+            public List<Vector3Int> preparedFields;
+            public List<Vector3Int> cropFields;
+            public List<string> cropData;
+            public List<Vector3Int> removedDebris;
+            public int previousCurrentDay;
         }
     }
 }
