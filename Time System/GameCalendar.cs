@@ -53,5 +53,10 @@ namespace FarmGame.TimeSystem
             }
             WeekDay = GetWeekDay(Season, Day);
         }
+
+        public string GetSaveData()
+        {
+            return $"{Year},{Season},{Day}";
+        }
     }
 }

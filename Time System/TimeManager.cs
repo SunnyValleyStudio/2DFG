@@ -1,3 +1,4 @@
+using FarmGame.SaveSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace FarmGame.TimeSystem
 {
-    public class TimeManager : MonoBehaviour
+    public class TimeManager : MonoBehaviour, ISavable
     {
         public event EventHandler<TimeEventArgs> OnClockProgress, OnDayProgress;
 
@@ -20,6 +21,8 @@ namespace FarmGame.TimeSystem
 
         //1 second == 10 in-game minutes
         private static int REAL_TO_GAME_TIME_CONVERSION = 1;
+
+        public int SaveID => SaveIDRepositor.TIME_MANAGER_ID;
 
         private void Start()
         {
@@ -90,6 +93,37 @@ namespace FarmGame.TimeSystem
                     SendDayUpdateEvent(oldSeasonIndex != _calendar.Season);
                 }
                 SendTimeUpdateEvent();
+            }
+        }
+
+        public string GetData()
+        {
+            return $"{_calendar.GetSaveData()},{_currentTime.Hours},{_currentTime.Minutes},{Mathf.RoundToInt(_passedTime)}";
+        }
+
+        public void RestoreData(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+            {
+                _currentTime = new TimeSpan(_currentTime.Days, wakeUpHour, 0, 0);
+                _calendar = new();
+                _calendar.OnSeaseonChanged += (seasonIndex) => SendDayUpdateEvent(true);
+                return;
+            }
+            string[] loadedData = data.Split(',');
+            if(loadedData.Length > 0 )
+            {
+                _calendar = new(int.Parse(loadedData[0]), int.Parse(loadedData[1]),
+                    int.Parse(loadedData[2]));
+                _currentTime = new(int.Parse(loadedData[3]), int.Parse(loadedData[4]), 0);
+                _passedTime = int.Parse(loadedData[5]);
+            }
+            else
+            {
+                _currentTime = new TimeSpan(_currentTime.Days, wakeUpHour, 0, 0);
+                _calendar = new();
+                _calendar.OnSeaseonChanged += (seasonIndex) => SendDayUpdateEvent(true);
+                return;
             }
         }
     }

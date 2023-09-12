@@ -14,7 +14,7 @@ namespace FarmGame.SceneTransitions
 
         private SceneTransitionTrigger[] _transitionTriggers;
 
-        public int SaveID => 0;
+        public int SaveID => SaveIDRepositor.SCENE_TRANSITION_SPAWNER;
 
         private void Awake()
         {
