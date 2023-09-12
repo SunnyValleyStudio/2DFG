@@ -219,6 +219,8 @@ namespace FarmGame.Farming
                             }
                         }
                     }
+                    if (_fieldRenderer != null)
+                        _fieldRenderer.PrepareFieldAt(position);
                 }
                 else
                 {

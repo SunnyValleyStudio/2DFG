@@ -49,7 +49,7 @@ namespace FarmGame.Farming
             CropRenderer renderer
                 = _cropVisualRepresentation[tilePosition].GetComponent<CropRenderer>();
             renderer.SetSprite(cropSprite);
-            if(changeLayerOrder)
+            if (changeLayerOrder)
             {
                 renderer.ChangeLayerOrder();
             }
