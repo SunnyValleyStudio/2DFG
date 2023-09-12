@@ -1,6 +1,7 @@
 using FarmGame.Agent;
 using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
+using FarmGame.SaveSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace FarmGame.Tools
 {
-    public class ToolsBag : MonoBehaviour
+    public class ToolsBag : MonoBehaviour, ISavable
     {
         [SerializeField]
         private ItemDatabaseSO _itemDatabase;
@@ -27,28 +28,14 @@ namespace FarmGame.Tools
         private int _handToolID = 4;
 
         public Tool CurrentTool => _newBag[_selectedIndex];
+
+        public int SaveID => SaveIDRepositor.TOOLS_BAG_ID;
+
         public event Action<int, List<Sprite>, int?> OnToolsBagUpdated;
 
         private void Awake()
         {
-            for (int i = 0; i < _initialTools.Count; i++)
-            {
-                ItemDescription description = _itemDatabase.GetItemData(_initialTools[i]);
-                string data = null;
-                int quantity = 1;
-                if(description.ToolType == ToolType.SeedPlacer)
-                {
-                    data = JsonUtility.ToJson(new SeedToolData
-                    {
-                        cropID = description.CropTypeIndex,
-                        quantity = 2
-                    });
-                    quantity = 2;
-                }
-                _toolsBagInventory.AddItem(new InventoryItemData(description.ID, quantity, 
-                    -1, data), description.StackQuantity);
-            }
-            UpdateToolsBag(_toolsBagInventory.InventoryContent);
+            
         }
 
         private void UpdateToolsBag(IEnumerable<InventoryItemData> inventoryContent)
@@ -71,7 +58,7 @@ namespace FarmGame.Tools
                         ((IQuantity)newTool).Quantity = tool.count;
                         _toolsBagInventory.AddItemAt(index,
                             new InventoryItemData(toolDescription.ID, tool.count, tool.quality,
-                            newTool.GetDataToSave()));
+                            newTool.GetDataToSave()), false);
                     }
                     _newBag.Add(newTool);
                 }
@@ -205,5 +192,53 @@ namespace FarmGame.Tools
             }
             UpdateInventoryData(agent);
         }
+
+        public string GetData()
+        {
+            ToolsBadSaveData data = new()
+            {
+                selectedToolIndex = _selectedIndex,
+                toolsInventoryData = _toolsBagInventory.GetDataToSave()
+            };
+            return JsonUtility.ToJson(data);
+        }
+
+        public void RestoreData(string data)
+        {
+            _toolsBagInventory.OnUpdateInventory += UpdateToolsBag;
+            if (string.IsNullOrEmpty(data))
+            {
+                for (int i = 0; i < _initialTools.Count; i++)
+                {
+                    ItemDescription description = _itemDatabase.GetItemData(_initialTools[i]);
+                    string toolData = null;
+                    int quantity = 1;
+                    if (description.ToolType == ToolType.SeedPlacer)
+                    {
+                        toolData = JsonUtility.ToJson(new SeedToolData
+                        {
+                            cropID = description.CropTypeIndex,
+                            quantity = 2
+                        });
+                        quantity = 2;
+                    }
+                    _toolsBagInventory.AddItem(new InventoryItemData(description.ID, quantity,
+                        -1, toolData), description.StackQuantity, false);
+                }
+                UpdateToolsBag(_toolsBagInventory.InventoryContent);
+                return;
+            }
+            ToolsBadSaveData loadedData = JsonUtility.FromJson<ToolsBadSaveData>(data);
+            _selectedIndex = loadedData.selectedToolIndex;
+            _toolsBagInventory.RestoreSavedData(loadedData.toolsInventoryData);
+        }
+
+        [Serializable]
+        public struct ToolsBadSaveData
+        {
+            public int selectedToolIndex;
+            public string toolsInventoryData;
+        }
+
     }
 }

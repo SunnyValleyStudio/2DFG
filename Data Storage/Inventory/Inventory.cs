@@ -42,7 +42,7 @@ namespace FarmGame.DataStorage.Inventory
             _capacity = newCapacity;
         }
 
-        public int AddItem(InventoryItemData item, int stackSize)
+        public int AddItem(InventoryItemData item, int stackSize, bool callUpdate = true)
         {
             int quantityRemaining = item.count;
             if(stackSize > 1) 
@@ -68,8 +68,8 @@ namespace FarmGame.DataStorage.Inventory
                         _inventoryContent[i]
                             = new InventoryItemData(item.id, _inventoryContent[i].count + quantityToStore, item.quality,
                             item.data);
-
-                        OnUpdateInventory?.Invoke(InventoryContent);
+                        if(callUpdate)
+                            OnUpdateInventory?.Invoke(InventoryContent);
                         if (quantityRemaining <= 0)
                             return 0;
                     }
@@ -169,14 +169,15 @@ namespace FarmGame.DataStorage.Inventory
             return true;
         }
 
-        public bool AddItemAt(int index, InventoryItemData item)
+        public bool AddItemAt(int index, InventoryItemData item, bool callUpdate = true)
         {
             if(index >= _capacity || index < 0)
             {
                 return false;
             }
             _inventoryContent[index] = item;
-            OnUpdateInventory?.Invoke(InventoryContent);
+            if(callUpdate)
+                OnUpdateInventory?.Invoke(InventoryContent);
             return true; 
         }
 
