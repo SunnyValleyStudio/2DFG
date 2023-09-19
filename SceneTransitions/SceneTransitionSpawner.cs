@@ -25,7 +25,7 @@ namespace FarmGame.SceneTransitions
             }
             else
             {
-                Debug.LogError($"Player couldn't be found", gameObject);
+                Debug.LogWarning($"Player couldn't be found", gameObject);
             }
             _transitionTriggers = FindObjectsOfType<SceneTransitionTrigger>();
         }

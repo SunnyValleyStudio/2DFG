@@ -18,6 +18,8 @@ namespace FarmGame.SaveSystem
         private bool _mainMenuFlag = false;
         private List<ObjectsSaveData> _unusedData = new();
 
+        public bool SaveDataPresent { get; private set; }
+
         private void Start()
         {
             if (_mainMenuFlag)
@@ -121,9 +123,30 @@ namespace FarmGame.SaveSystem
             RestoreData(data);
         }
 
-        private void ReadFromFile(string gameSaveFileName, out string data)
+        private bool ReadFromFile(string gameSaveFileName, out string data)
         {
-            throw new NotImplementedException();
+            string fullPath = Path.Combine(Application.persistentDataPath,
+                gameSaveFileName + ".txt");
+            data = string.Empty;
+            try
+            {
+                data = File.ReadAllText(fullPath);
+                SaveDataPresent = string.IsNullOrEmpty(data) == false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Error when loadin the file " + e.Message);
+                
+            }
+            return false;
+        }
+
+        public void ResetSavedData()
+        {
+            PlayerPrefs.DeleteKey(_saveDataKey);
+            WriteToFile(_gameSaveFileName, string.Empty);
+            _unusedData.Clear();
         }
 
         [Serializable]
