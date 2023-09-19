@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -29,7 +30,34 @@ namespace FarmGame.SaveSystem
                 += SaveGameState;
         }
 
-        private void SaveGameState()
+        public void SaveDataToFile()
+        {
+            string data = GetDataToSave();
+            if(WriteToFile(_gameSaveFileName, data))
+            {
+                Debug.Log("Data Saved to a file");
+            }
+        }
+
+        private bool WriteToFile(string gameSaveFileName, string data)
+        {
+            string fullPath = Path.Combine(Application.persistentDataPath, 
+                gameSaveFileName +".txt");
+            Debug.Log($"{fullPath}");
+
+            try
+            {
+                File.WriteAllText(fullPath, data);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error while savaing data to a file " + e.Message);
+            }
+            return false;
+        }
+
+        public void SaveGameState()
         {
             string data = GetDataToSave();
             PlayerPrefs.SetString(_saveDataKey, data);
