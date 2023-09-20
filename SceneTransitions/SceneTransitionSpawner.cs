@@ -32,7 +32,7 @@ namespace FarmGame.SceneTransitions
 
         public string GetData()
         {
-            SaveData saveData = new();
+            SaveData saveData = new() { TransitionID = -1};
             foreach(SceneTransitionTrigger trigger in _transitionTriggers)
             {
                 if (trigger.Triggered)

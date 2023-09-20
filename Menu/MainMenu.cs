@@ -40,13 +40,13 @@ namespace FarmGame.Menu
         {
             _screenTransitionEffect.PlayTransition(false);
             _saveManager.SaveGameState();
-            StartCoroutine(LoadScene(_inHouseSceneName));
+            StartCoroutine(LoadScene(_sceneTransitionManager.LoadedSceneName));
         }
 
-        private IEnumerator LoadScene(string inHouseSceneName)
+        private IEnumerator LoadScene(string sceneName)
         {
             yield return new WaitForSeconds(0.4f);
-            _sceneTransitionManager.LoadScene(_inHouseSceneName);
+            _sceneTransitionManager.LoadScene(sceneName);
         }
     }
 }
