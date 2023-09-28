@@ -233,6 +233,9 @@ namespace FarmGame.Tools
             _toolsBagInventory.RestoreSavedData(loadedData.toolsInventoryData);
         }
 
+        internal Inventory GetInventory()
+        => _toolsBagInventory;
+
         [Serializable]
         public struct ToolsBadSaveData
         {
