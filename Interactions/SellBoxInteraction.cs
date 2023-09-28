@@ -13,13 +13,13 @@ namespace FarmGame.Interactions
         public List<ToolType> UsableTools { get; set; } = new() { ToolType.Hand };
 
         [SerializeField]
-        private SellBoxController _sellBoxController;
+        private StorageBoxController _sellBoxController;
         public bool CanInteract(IAgent agent)
         => UsableTools.Contains(agent.ToolsBag.CurrentTool.ToolType);
 
         public void Interact(IAgent agent)
         {
-            _sellBoxController.PrepareSellBox(agent.Inventory);
+            _sellBoxController.PrepareStorageBox(agent.Inventory);
         }
     }
 }
