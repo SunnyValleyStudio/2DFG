@@ -35,7 +35,11 @@ namespace FarmGame.Tools
 
         private void Awake()
         {
-            
+            _toolsBagInventory.OnUpdateInventory += (inventoryContent) =>
+            {
+                UpdateToolsBag(inventoryContent);
+                SendUpdateMessage();
+            };
         }
 
         private void UpdateToolsBag(IEnumerable<InventoryItemData> inventoryContent)
