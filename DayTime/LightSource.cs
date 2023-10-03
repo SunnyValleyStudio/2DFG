@@ -2,26 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-namespace FarmGame
+namespace FarmGame.DayNight
 {
     public class LightSource : MonoBehaviour
     {
-        internal void ToggleLight(bool obj)
+        [SerializeField]
+        private Light2D _light;
+        internal void ToggleLight(bool value)
         {
-            throw new NotImplementedException();
+            _light.enabled = value;
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
     }
 }
