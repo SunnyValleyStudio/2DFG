@@ -390,6 +390,18 @@ namespace FarmGame.Farming
             PrintCropsStatus();
         }
 
+        internal void WaterAllCrops()
+        {
+            foreach (var cropPosition in _fieldData.crops.Keys)
+            {
+                if (_fieldData.crops[cropPosition].Watered)
+                    continue;
+                WaterCropUpdateData(cropPosition);
+                if(_fieldRenderer != null)
+                    _fieldRenderer.WaterCropAt(cropPosition, false);
+            }
+        }
+
         [Serializable]
         public struct FieldControllerSaveData
         {

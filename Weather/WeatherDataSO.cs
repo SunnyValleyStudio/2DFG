@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FarmGame
+namespace FarmGame.Weather
 {
     [CreateAssetMenu]
     public class WeatherDataSO : ScriptableObject

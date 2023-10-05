@@ -102,9 +102,10 @@ namespace FarmGame.Farming
             _cropVisualRepresentation.Remove(position);
         }
 
-        public void WaterCropAt(Vector3Int tilePosition)
+        public void WaterCropAt(Vector3Int tilePosition, bool playWaterEffect = true)
         {
-            PlayWaterSplashEffect(tilePosition);
+            if(playWaterEffect)
+                PlayWaterSplashEffect(tilePosition);
             _preparedFieldTilemap.SetTile(tilePosition, _wateredFieldTile);
         }
 
