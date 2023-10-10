@@ -4,6 +4,7 @@ using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
 using FarmGame.SaveSystem;
+using FarmGame.StaminaSystem;
 using FarmGame.Tools;
 using FarmGame.UI;
 using System;
@@ -52,6 +53,9 @@ namespace FarmGame.Agent
                 _agentInput.BlockInput(_blocked);
             }
         }
+
+        [field: SerializeField]
+        public AgentStamina AgentStaminaSystem { get; private set; }
 
         [SerializeField]
         private Inventory _inventory;
@@ -135,7 +139,12 @@ namespace FarmGame.Agent
         private void PerformAction()
         {
             Debug.Log("Interacting");
-            ToolsBag.CurrentTool.UseTool(this);
+            ToolType type = ToolsBag.CurrentTool.ToolType;
+            if(type == ToolType.Hand || AgentStaminaSystem.IsThereEnoughStamina())
+            {
+                ToolsBag.CurrentTool.UseTool(this);
+            }
+            
         }
 
 

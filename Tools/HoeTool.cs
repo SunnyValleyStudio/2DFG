@@ -43,6 +43,7 @@ namespace FarmGame.Tools
                     agent.FieldController.PrepareFieldAt(worldPositon);
                 }
                 agent.Blocked = false;
+                OnFinishedAction?.Invoke(agent);
                 Debug.Log("Agent Restarted");
             }
                 );

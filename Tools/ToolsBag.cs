@@ -137,6 +137,9 @@ namespace FarmGame.Tools
         {
             _newBag[_selectedIndex].Equip(agent);
             _newBag[_selectedIndex].OnFinishedAction += UpdateInventoryData;
+            if (_selectedIndex != 0)
+                _newBag[_selectedIndex].OnFinishedAction += (a) =>
+                a.AgentStaminaSystem.ModifyStamina(_newBag[_selectedIndex].ToolType);
         }
 
         private void UpdateInventoryData(IAgent agent)

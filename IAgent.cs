@@ -2,6 +2,7 @@
 using FarmGame.Farming;
 using FarmGame.Input;
 using FarmGame.Interactions;
+using FarmGame.StaminaSystem;
 using FarmGame.Tools;
 
 namespace FarmGame.Agent
@@ -19,6 +20,7 @@ namespace FarmGame.Agent
 
         public Inventory Inventory { get; }
         AgentDataSO AgentData { get; }
+        AgentStamina AgentStaminaSystem { get; }
     }
 
 }

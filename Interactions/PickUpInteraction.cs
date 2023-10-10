@@ -29,7 +29,11 @@ namespace FarmGame.Interactions
             _data = GetComponent<ItemData>();
         }
         public bool CanInteract(IAgent agent)
-            => UsableTools.Contains(agent.ToolsBag.CurrentTool.ToolType);
+        { 
+            if(agent.AgentStaminaSystem.IsThereEnoughStamina() == false)
+                return false;
+            return UsableTools.Contains(agent.ToolsBag.CurrentTool.ToolType); 
+        }
 
         public void Interact(IAgent agent)
         {
@@ -54,6 +58,8 @@ namespace FarmGame.Interactions
                 {
                     _data.itemCount = 0;
                 }
+                agent.AgentStaminaSystem
+                    .ModifyStamina(agent.ToolsBag.CurrentTool.ToolType);
             }
         }
     }
