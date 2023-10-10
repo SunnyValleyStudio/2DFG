@@ -21,6 +21,20 @@ namespace FarmGame.Agent
 				OnDataUpdated?.Invoke(this);
 			}
 		}
+        [field: SerializeField]
+        public int StaminaMax { get; private set; } = 100;
+        [SerializeField]
+        private int _currentStamina;
+
+        public int CurrentStamina
+        {
+            get { return _currentStamina; }
+            set { 
+                _currentStamina = value; 
+                OnDataUpdated?.Invoke(this);
+            }
+        }
+
 
         public Inventory Inventory { get; internal set; }
 
@@ -29,6 +43,8 @@ namespace FarmGame.Agent
             AgentSaveData data = new()
             {
                 money = _money,
+                currentStamina = _currentStamina,
+                maxStamina = StaminaMax,
                 inventoryData = Inventory.GetDataToSave()
             };
             return JsonUtility.ToJson(data);
@@ -37,19 +53,22 @@ namespace FarmGame.Agent
         internal void SetDefaultData()
         {
             Money = 0;
+            CurrentStamina = StaminaMax;
         }
 
         internal void RestoreData(string data)
         {
             AgentSaveData loadedData = JsonUtility.FromJson<AgentSaveData>(data);
             Money = loadedData.money;
+            CurrentStamina = loadedData.currentStamina;
+            StaminaMax = loadedData.maxStamina;
             Inventory.RestoreSavedData(loadedData.inventoryData);
         }
 
         [Serializable]
         public struct AgentSaveData
         {
-            public int money;
+            public int money, currentStamina, maxStamina;
             public string inventoryData;
         }
     }
