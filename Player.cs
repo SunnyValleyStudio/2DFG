@@ -36,6 +36,11 @@ namespace FarmGame.Agent
         [SerializeField]
         private ToolSelectionUI _toolSelectionUI;
 
+        [SerializeField]
+        private GameObject _playerUI;
+        [SerializeField]
+        private PlayerInformationSystem _informationSystem;
+
         private bool _blocked = false;
 
         public bool Blocked
@@ -180,6 +185,16 @@ namespace FarmGame.Agent
             {
                 AgentData.RestoreData(data);
             }
+        }
+
+        public void SetUIVisibility(bool val)
+        {
+            _playerUI.SetActive(val);
+        }
+
+        public void ShowInformation(string infoText)
+        {
+            _informationSystem.ShowInformation(this, infoText);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace FarmGame.DialogueSystem
 
         [SerializeField]
         private Image _portraitImage;
+        [SerializeField]
         private TextMeshProUGUI _nameTag, _dialogueText;
 
         [SerializeField]
