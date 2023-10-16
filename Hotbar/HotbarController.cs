@@ -69,7 +69,7 @@ namespace FarmGame.Hotbar
             }
         }
 
-        private void ResetSelection()
+        public void ResetSelection()
         {
             for (int i = 0; i < _hotbarItems.Length; i++)
             {

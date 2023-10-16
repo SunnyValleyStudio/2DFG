@@ -17,6 +17,9 @@ namespace FarmGame.Input
         public event Action OnPerformAction, OnSwapTool, OnToggleInventory;
         public event Action OnUIExit, OnUIToggleInventory, OnUIInteract;
         public event Action<Vector2> OnUIMoveInput;
+        public event Action<int> OnHotBarKey;
+        public event Action OnCancelSelection;
+
 
         private void OnEnable()
         {
@@ -25,11 +28,23 @@ namespace FarmGame.Input
             _input.actions["Player/Interact"].performed += Interact;
             _input.actions["Player/SwapTool"].performed += SwapTool;
             _input.actions["Player/ToggleInventory"].performed += ToggleInventory;
+            _input.actions["Player/HotKeys"].performed += HotBarKeyHandler;
+            _input.actions["Player/CancelSelection"].performed += HotBarCancelHandler;
 
             _input.actions["UI/Movement"].performed += MoveUI;
             _input.actions["UI/Interact"].performed += InteractUI;
             _input.actions["UI/Exit"].performed += ExitUI;
             _input.actions["UI/ToggleInventory"].performed += ToggleInventoryUI;
+        }
+
+        private void HotBarCancelHandler(InputAction.CallbackContext context)
+        {
+            OnCancelSelection?.Invoke();
+        }
+
+        private void HotBarKeyHandler(InputAction.CallbackContext context)
+        {
+            OnHotBarKey?.Invoke(Mathf.RoundToInt(context.ReadValue<float>()));
         }
 
         private void ExitUI(InputAction.CallbackContext obj)
@@ -106,6 +121,8 @@ namespace FarmGame.Input
             _input.actions["Player/Interact"].performed -= Interact;
             _input.actions["Player/SwapTool"].performed -= SwapTool;
             _input.actions["Player/ToggleInventory"].performed -= ToggleInventory;
+            _input.actions["Player/HotKeys"].performed -= HotBarKeyHandler;
+            _input.actions["Player/CancelSelection"].performed -= HotBarCancelHandler;
 
             _input.actions["UI/Movement"].performed -= MoveUI;
             _input.actions["UI/Interact"].performed -= InteractUI;

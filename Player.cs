@@ -121,12 +121,36 @@ namespace FarmGame.Agent
             _agentInput.OnPerformAction += PerformAction;
             _agentInput.OnSwapTool += SwapTool;
             _agentInput.OnToggleInventory += ToggleInventory;
+            _agentInput.OnHotBarKey += HandleHotbarSelection;
+            _agentInput.OnCancelSelection += CancelHotbarSelection;
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
 
             Inventory.OnUpdateInventory += _hotbarController.UpdateHotBar;
             
             ToolsBag.OnToolsBagUpdated += _toolSelectionUI.UpdateUI;
+        }
+
+        private void CancelHotbarSelection()
+        {
+            _hotbarController.ResetSelection();
+        }
+
+        private void HandleHotbarSelection(int id)
+        {
+            if (Blocked)
+                return;
+            int index = id - 1;
+            InventoryItemData carriedItem = Inventory.GetItemDataAt(index);
+            if(carriedItem == null)
+            {
+                _hotbarController.ResetSelection();
+                return;
+            }
+            else
+            {
+                _hotbarController.SelectItem(index);
+            }
         }
 
         private void ToggleInventory()
@@ -170,6 +194,8 @@ namespace FarmGame.Agent
             _agentInput.OnPerformAction -= PerformAction;
             _agentInput.OnSwapTool -= SwapTool;
             _agentInput.OnToggleInventory -= ToggleInventory;
+            _agentInput.OnHotBarKey -= HandleHotbarSelection;
+            _agentInput.OnCancelSelection -= CancelHotbarSelection;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
 
