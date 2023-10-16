@@ -133,6 +133,25 @@ namespace FarmGame.Agent
             Inventory.OnUpdateInventory += _hotbarController.UpdateHotBar;
             
             ToolsBag.OnToolsBagUpdated += _toolSelectionUI.UpdateUI;
+
+            _carryItemSystem.OnStartCarrying += StartCarryAction;
+            _carryItemSystem.OnCancelCarrying += StopCarryAction;
+        }
+
+        private void StopCarryAction()
+        {
+            if (Blocked == false)
+            {
+                _agentAnimation.SetCarrying(false);
+            }
+        }
+
+        private void StartCarryAction()
+        {
+            if(Blocked == false)
+            {
+                _agentAnimation.SetCarrying(true);
+            }
         }
 
         private void CancelHotbarSelection()
@@ -197,6 +216,9 @@ namespace FarmGame.Agent
             Inventory.OnUpdateInventory -= _hotbarController.UpdateHotBar;
 
             ToolsBag.OnToolsBagUpdated -= _toolSelectionUI.UpdateUI;
+
+            _carryItemSystem.OnStartCarrying -= StartCarryAction;
+            _carryItemSystem.OnCancelCarrying -= StopCarryAction;
         }
 
         public string GetData()

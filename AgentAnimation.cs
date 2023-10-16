@@ -15,7 +15,8 @@ namespace FarmGame.Agent
             directionY = "DirectionY", 
             movingBoolFlag = "Movement",
             pickup = "Pickup", swing = "Swing",
-            watering = "Watering";
+            watering = "Watering",
+            carry = "Carry";
 
         [SerializeField]
         private ToolAnimation toolAnimation;
@@ -75,6 +76,15 @@ namespace FarmGame.Agent
             {
                 _animator.SetTrigger(watering);
             }
+        }
+
+        public void SetCarrying(bool val)
+        {
+            _animator.SetBool(carry, val);
+            if (val)
+                _animator.Play("Idle Carry Blend Tree");
+            else
+                _animator.Play("Idle Blend Tree");
         }
     }
 
