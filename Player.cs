@@ -1,3 +1,4 @@
+using FarmGame.CarryItemManager;
 using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
 using FarmGame.Farming;
@@ -44,6 +45,9 @@ namespace FarmGame.Agent
 
         [SerializeField]
         private HotbarController _hotbarController;
+
+        [SerializeField]
+        private CarryItemSystem _carryItemSystem;
 
         private bool _blocked = false;
 
@@ -133,7 +137,7 @@ namespace FarmGame.Agent
 
         private void CancelHotbarSelection()
         {
-            _hotbarController.ResetSelection();
+            _carryItemSystem.ResetSelection();
         }
 
         private void HandleHotbarSelection(int id)
@@ -141,16 +145,7 @@ namespace FarmGame.Agent
             if (Blocked)
                 return;
             int index = id - 1;
-            InventoryItemData carriedItem = Inventory.GetItemDataAt(index);
-            if(carriedItem == null)
-            {
-                _hotbarController.ResetSelection();
-                return;
-            }
-            else
-            {
-                _hotbarController.SelectItem(index);
-            }
+            _carryItemSystem.StartCarrying(index, Inventory);
         }
 
         private void ToggleInventory()
