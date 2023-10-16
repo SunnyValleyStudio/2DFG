@@ -1,6 +1,7 @@
 using FarmGame.DataStorage;
 using FarmGame.DataStorage.Inventory;
 using FarmGame.Farming;
+using FarmGame.Hotbar;
 using FarmGame.Input;
 using FarmGame.Interactions;
 using FarmGame.SaveSystem;
@@ -40,6 +41,9 @@ namespace FarmGame.Agent
         private GameObject _playerUI;
         [SerializeField]
         private PlayerInformationSystem _informationSystem;
+
+        [SerializeField]
+        private HotbarController _hotbarController;
 
         private bool _blocked = false;
 
@@ -120,6 +124,8 @@ namespace FarmGame.Agent
 
             _agentMover.OnMove += _agentAnimation.PlayMovementAnimation;
 
+            Inventory.OnUpdateInventory += _hotbarController.UpdateHotBar;
+            
             ToolsBag.OnToolsBagUpdated += _toolSelectionUI.UpdateUI;
         }
 
@@ -134,6 +140,7 @@ namespace FarmGame.Agent
             //Debug.Log("<color=red>Resetting Agent Data</color>");
             //AgentData.Money = 0;
             _agentAnimation.ChangeDirection(Vector2.down);
+            _hotbarController.UpdateHotBar(Inventory.InventoryContent);
         }
 
         private void SwapTool()
@@ -165,6 +172,8 @@ namespace FarmGame.Agent
             _agentInput.OnToggleInventory -= ToggleInventory;
 
             _agentMover.OnMove -= _agentAnimation.PlayMovementAnimation;
+
+            Inventory.OnUpdateInventory -= _hotbarController.UpdateHotBar;
 
             ToolsBag.OnToolsBagUpdated -= _toolSelectionUI.UpdateUI;
         }
