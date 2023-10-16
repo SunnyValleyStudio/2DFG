@@ -181,6 +181,20 @@ namespace FarmGame.DataStorage.Inventory
             return true; 
         }
 
+        public void RemoveOneItem(InventoryItemData item)
+        {
+            int index = Array.IndexOf(_inventoryContent, item);
+            if(index > -1)
+            {
+                _inventoryContent[index]
+                    = item with { count = _inventoryContent[index].count - 1 };
+                if (_inventoryContent[index].count <= 0)
+                    _inventoryContent[index] = null;
+
+                OnUpdateInventory?.Invoke(InventoryContent);
+            }
+        }
+
         internal void Clear()
         {
             for (int i = 0; i < _inventoryContent.Length; i++)

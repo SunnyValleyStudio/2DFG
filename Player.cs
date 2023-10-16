@@ -188,15 +188,46 @@ namespace FarmGame.Agent
 
         private void PerformAction()
         {
-            Debug.Log("Interacting");
-            ToolType type = ToolsBag.CurrentTool.ToolType;
-            if(type == ToolType.Hand || AgentStaminaSystem.IsThereEnoughStamina())
+            if (Blocked)
+                return;
+            if (_carryItemSystem.AmICarryingItem)
             {
-                ToolsBag.CurrentTool.UseTool(this);
+                CarryItemInteraction();
             }
-            
+            else
+            {
+                Debug.Log("Interacting");
+                ToolType type = ToolsBag.CurrentTool.ToolType;
+                if (type == ToolType.Hand || AgentStaminaSystem.IsThereEnoughStamina())
+                {
+                    ToolsBag.CurrentTool.UseTool(this);
+                }
+            }
         }
 
+        private void CarryItemInteraction()
+        {
+            InventoryItemData inventoryItem 
+                = Inventory.GetItemDataAt(_carryItemSystem.CarriedItemIndex);
+            ItemDescription description = _itemDatabase.GetItemData(inventoryItem.id);
+            bool success = false;
+            if (description.Consumable)
+            {
+                Debug.Log("Consuming the carried item");
+                AgentStaminaSystem.ModifyStamina(description.EnergyBoost);
+                success = true;
+            }
+            else if (description.CanThrowAway)
+            {
+                success = true;
+            }
+
+            if(success)
+            {
+                Inventory.RemoveOneItem(inventoryItem);
+                _carryItemSystem.ResetSelection();
+            }
+        }
 
         private void OnDisable()
         {
