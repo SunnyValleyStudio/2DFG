@@ -284,7 +284,7 @@ namespace FarmGame.Farming
         {
             if(_fieldRenderer == null) return;
             Vector3Int tilePositon = _fieldRenderer.GetTilemapTilePosition(worldPosition);
-            if(_fieldData.crops.ContainsKey(tilePositon) )
+            if(_fieldData.preparedFields.Contains(tilePositon))
             {
                 return;
             }
