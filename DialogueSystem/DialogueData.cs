@@ -10,7 +10,7 @@ namespace FarmGame.DialogueSystem
     {
         [field: SerializeField]
         public CharacterDataSO CharacterData { get; private set; }
-        [field: SerializeField]
+        [field: SerializeField, Multiline]
         public string Text { get; set; }
 
         public UnityEvent<IAgent> OnActon;

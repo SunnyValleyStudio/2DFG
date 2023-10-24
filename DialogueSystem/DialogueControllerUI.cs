@@ -71,7 +71,9 @@ namespace FarmGame.DialogueSystem
 
         private void SetDialogueUIData(DialogueData dialogueData)
         {
-            if(dialogueData.CharacterData != null)
+            _portraitImage.gameObject.SetActive(dialogueData.CharacterData != null);
+            _nameTag.gameObject.SetActive(dialogueData.CharacterData != null);
+            if (dialogueData.CharacterData != null)
             {
                 _portraitImage.sprite = dialogueData.CharacterData.Portrait;
                 _nameTag.text = dialogueData.CharacterData.CharacterName;
