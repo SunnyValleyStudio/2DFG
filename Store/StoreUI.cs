@@ -100,7 +100,11 @@ namespace FarmGame.Store
                 {
                     ItemDescription itemData = _itemDatabase.GetItemData(item.id);
                     _storeRenderer.UpdateItem(index, itemData.Image, item.count);
-                    //ADd code to update price
+                    ItemControllerUI itemController = _storeRenderer.GetItemAt(index);
+                    if(itemController != null)
+                    {
+                        itemController.GetComponent<ItemPriceUI>().SetPrice(itemData.Price);
+                    }
                 }
                 index++;    
             }

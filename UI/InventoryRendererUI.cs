@@ -42,7 +42,7 @@ namespace FarmGame.UI
             GetItemAt(index).UpdateData(sprite, itemCount);
         }
 
-        private ItemControllerUI GetItemAt(int index)
+        public ItemControllerUI GetItemAt(int index)
         {
             if (index >= _inventoryItems.Count || index < 0)
                 throw new IndexOutOfRangeException($"There is no UI item with index {index}");
