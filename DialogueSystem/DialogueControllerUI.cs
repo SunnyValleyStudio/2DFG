@@ -27,7 +27,8 @@ namespace FarmGame.DialogueSystem
         [SerializeField]
         private PauseTimeControllerSO _pauseTimeController;
 
-        Player _playerReference;
+        [SerializeField]
+        private Player _playerReference;
         public event Action OnShowUI, OnHideUI;
 
         private Action _progressDialogueAction;
