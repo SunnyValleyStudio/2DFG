@@ -154,7 +154,7 @@ namespace FarmGame.Store
             _input.OnUIExit -= OnExitSellWindow;
             _input.OnUIInteract -= PurchaseSelectedItem;
 
-            _storeConfirmUI.HideConfirmWindow();
+            _storeConfirmUI.HideConfirmWindow(_input);
 
             _storeItemSelection.SelectItemAt(_lastSelection);
         }
