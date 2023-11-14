@@ -198,7 +198,8 @@ namespace FarmGame.Farming
                             crop.GrowthLevel++;
                             crop.Progress = 0;
                             //is the crop ready for harvest
-                            if(crop.GrowthLevel == cropData.Sprites.Count - 1)
+                            UpdateCropAt(position, crop.ID, crop.GrowthLevel);
+                            if (crop.GrowthLevel == cropData.Sprites.Count - 1)
                             {
                                 crop.Ready = true;
                                 ClearFieldAt(position);
@@ -212,10 +213,6 @@ namespace FarmGame.Farming
                                     });
                                 }
                                 return;
-                            }
-                            else
-                            {
-                                UpdateCropAt(position, crop.ID, crop.GrowthLevel);
                             }
                         }
                     }
