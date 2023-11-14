@@ -338,8 +338,11 @@ namespace FarmGame.Farming
             bool result = WaterCropUpdateData(tilePosition);
             if (result == false)
                 return;
-            _fieldRenderer.WaterCropAt(tilePosition);
-            _audioSource.PlayOneShot(_wateringFieldSound);
+            if (_fieldData.preparedFields.Contains(tilePosition))
+            {
+                _fieldRenderer.WaterCropAt(tilePosition);
+                _audioSource.PlayOneShot(_wateringFieldSound);
+            }
         }
 
         private bool WaterCropUpdateData(Vector3Int tilePosition)
