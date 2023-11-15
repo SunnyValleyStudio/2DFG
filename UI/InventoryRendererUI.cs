@@ -76,12 +76,22 @@ namespace FarmGame.UI
             }
         }
 
-        private void MarkItem(int itemIndex, bool resetSelection = true)
+        public void MarkItem(int itemIndex, bool resetSelection = true)
         {
             ItemControllerUI controller = GetItemAt(itemIndex);
             if (resetSelection)
                 controller.Outline.SetOutline(false);
             controller.Outline.SetOutline(true, Mode.Mark);
+        }
+
+        public void ResetMarkedSelection(int index)
+        {
+            ItemControllerUI controller = GetItemAt(index);
+            controller.Outline.SetOutline(false);
+            if (controller.Outline.IsSelected)
+            {
+                controller.Outline.SetOutline(true, Mode.Select);
+            }
         }
     }
 }
