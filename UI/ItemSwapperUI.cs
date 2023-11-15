@@ -53,6 +53,11 @@ namespace FarmGame.UI
                     _itemSelectionUI.SelectedItem);
                 _inventoryRendererUI.ResetMarkedSelection(ItemIndexSelectedForInteraction.Value);
 
+                if(_itemIndexSelectedForInteraction.Value == _itemSelectionUI.SelectedItem)
+                {
+                    _inventoryRendererUI.SelectItem(_itemSelectionUI.SelectedItem);
+                }
+
                 OnItemSwapped?.Invoke(_itemSelectionUI.SelectedItem);
                 ItemIndexSelectedForInteraction = null;
             }
