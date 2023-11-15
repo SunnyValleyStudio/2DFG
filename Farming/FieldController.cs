@@ -249,6 +249,14 @@ namespace FarmGame.Farming
             }
         }
 
+        public void RemoveCropAt(Vector3 position)
+        {
+            if (_fieldRenderer == null)
+                return;
+            Vector3Int cropPosition = _fieldRenderer.GetTilemapTilePosition(position) ;
+            _fieldRenderer.ResetWaterdField(cropPosition);
+            RemoveCropAt(cropPosition);
+        }
         private void RemoveCropAt(Vector3Int position)
         {
             _fieldData.crops.Remove(position);

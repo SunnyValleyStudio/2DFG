@@ -152,5 +152,10 @@ namespace FarmGame.Farming
             }
             _cropVisualRepresentation.Clear();
         }
+
+        internal void ResetWaterdField(Vector3Int cropPosition)
+        {
+            _preparedFieldTilemap.SetTile(cropPosition, _preparedFieldTile);
+        }
     }
 } 
