@@ -256,6 +256,7 @@ namespace FarmGame.Farming
             Vector3Int cropPosition = _fieldRenderer.GetTilemapTilePosition(position) ;
             _fieldRenderer.ResetWaterdField(cropPosition);
             RemoveCropAt(cropPosition);
+            _audioSource.PlayOneShot(_preparedFieldSound);
         }
         private void RemoveCropAt(Vector3Int position)
         {
@@ -402,7 +403,8 @@ namespace FarmGame.Farming
         {
             foreach (var cropPosition in _fieldData.crops.Keys)
             {
-                if (_fieldData.crops[cropPosition].Watered)
+                if (_fieldData.crops[cropPosition].Watered 
+                    || _fieldData.preparedFields.Contains(cropPosition) == false)
                     continue;
                 WaterCropUpdateData(cropPosition);
                 if(_fieldRenderer != null)

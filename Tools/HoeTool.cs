@@ -1,4 +1,5 @@
 using FarmGame.Agent;
+using FarmGame.Interactions;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,6 +42,16 @@ namespace FarmGame.Tools
                 foreach (Vector2 worldPositon in detectedPosition)
                 {
                     agent.FieldController.PrepareFieldAt(worldPositon);
+                    IEnumerable<IInteractable> interactables
+                    = agent.InteractionDetector.PerformDetection(worldPositon);
+                    foreach (IInteractable interactable in interactables)
+                    {
+                        if (interactable.CanInteract(agent))
+                        {
+                            interactable.Interact(agent);
+                            break;
+                        }
+                    }
                 }
                 agent.Blocked = false;
                 OnFinishedAction?.Invoke(agent);
